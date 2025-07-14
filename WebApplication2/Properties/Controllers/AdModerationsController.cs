@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using WebApplication2.Models;
 using WebApplication2.Properties.Data;
 using WebApplication2.Properties.Models;
+using WebApplication2.Properties.Services.Interfaces;
 
 namespace WebApplication2.Controllers
 {
@@ -13,88 +14,68 @@ namespace WebApplication2.Controllers
     [Route("api/[controller]")]
     public class AdModerationsController : ControllerBase
     {
-        private readonly AppDbContext _context;
+        private readonly IAdModerationsService _adModerationsService;
 
-        public AdModerationsController(AppDbContext context)
+        public AdModerationsController(IAdModerationsService adModerationsService)
         {
-            _context = context;
+            _adModerationsService = adModerationsService;
         }
 
         // GET: api/AdModerations
         [HttpGet]
         public async Task<ActionResult<IEnumerable<AdModeration>>> GetAdModerations()
         {
-            return await _context.AdModerations
-                .Include(m => m.Ad)
-                .Include(m => m.Admin)
-                .ToListAsync();
+            var moderations = await _adModerationsService.GetAdModerationsAsync();
+            return Ok(moderations);
         }
 
         // GET: api/AdModerations/5
         [HttpGet("{id}")]
         public async Task<ActionResult<AdModeration>> GetAdModeration(int id)
         {
-            var moderation = await _context.AdModerations
-                .Include(m => m.Ad)
-                .Include(m => m.Admin)
-                .FirstOrDefaultAsync(m => m.ModerationId == id);
-
+            var moderation = await _adModerationsService.GetAdModerationByIdAsync(id);
             if (moderation == null)
                 return NotFound();
 
-            return moderation;
+            return Ok(moderation);
         }
 
         // POST: api/AdModerations
         [HttpPost]
         public async Task<ActionResult<AdModeration>> CreateAdModeration(AdModeration moderation)
         {
-            _context.AdModerations.Add(moderation);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction(nameof(GetAdModeration), new { id = moderation.ModerationId }, moderation);
+            var createdModeration = await _adModerationsService.CreateAdModerationAsync(moderation);
+            return CreatedAtAction(nameof(GetAdModeration), new { id = createdModeration.ModerationId }, createdModeration);
         }
 
         // PUT: api/AdModerations/5
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateAdModeration(int id, AdModeration moderation)
         {
-            if (id != moderation.ModerationId)
-                return BadRequest();
-
-            _context.Entry(moderation).State = EntityState.Modified;
-
             try
             {
-                await _context.SaveChangesAsync();
+                await _adModerationsService.UpdateAdModerationAsync(id, moderation);
+                return NoContent();
             }
-            catch (DbUpdateConcurrencyException)
+            catch (ArgumentException)
             {
-                if (!AdModerationExists(id))
-                    return NotFound();
-                throw;
+                return BadRequest();
             }
-
-            return NoContent();
+            catch (KeyNotFoundException)
+            {
+                return NotFound();
+            }
         }
 
         // DELETE: api/AdModerations/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteAdModeration(int id)
         {
-            var moderation = await _context.AdModerations.FindAsync(id);
-            if (moderation == null)
+            var deleted = await _adModerationsService.DeleteAdModerationAsync(id);
+            if (!deleted)
                 return NotFound();
 
-            _context.AdModerations.Remove(moderation);
-            await _context.SaveChangesAsync();
-
             return NoContent();
-        }
-
-        private bool AdModerationExists(int id)
-        {
-            return _context.AdModerations.Any(e => e.ModerationId == id);
         }
     }
 }

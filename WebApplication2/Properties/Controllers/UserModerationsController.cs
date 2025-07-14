@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using WebApplication2.Properties.Data;
 using WebApplication2.Properties.Models;
+using WebApplication2.Properties.Services.Interfaces;
 
 namespace WebApplication2.Controllers
 {
@@ -12,67 +13,47 @@ namespace WebApplication2.Controllers
     [Route("api/[controller]")]
     public class UserModerationsController : ControllerBase
     {
-        private readonly AppDbContext _context;
+        private readonly IUserModerationsService _userModerationsService;
 
-        public UserModerationsController(AppDbContext context)
+        public UserModerationsController(IUserModerationsService userModerationsService)
         {
-            _context = context;
+            _userModerationsService = userModerationsService;
         }
 
         // GET: api/UserModerations
         [HttpGet]
         public async Task<ActionResult<IEnumerable<UserModeration>>> GetUserModerations()
         {
-            return await _context.UserModerations
-                .Include(um => um.User)
-                .Include(um => um.Admin)
-                .ToListAsync();
+            var moderations = await _userModerationsService.GetUserModerationsAsync();
+            return Ok(moderations);
         }
 
         // GET: api/UserModerations/5
         [HttpGet("{id}")]
         public async Task<ActionResult<UserModeration>> GetUserModeration(int id)
         {
-            var moderation = await _context.UserModerations
-                .Include(um => um.User)
-                .Include(um => um.Admin)
-                .FirstOrDefaultAsync(um => um.ModerationId == id);
-
+            var moderation = await _userModerationsService.GetUserModerationByIdAsync(id);
             if (moderation == null)
                 return NotFound();
 
-            return moderation;
+            return Ok(moderation);
         }
 
         // POST: api/UserModerations
         [HttpPost]
         public async Task<ActionResult<UserModeration>> CreateUserModeration(UserModeration moderation)
         {
-            _context.UserModerations.Add(moderation);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction(nameof(GetUserModeration), new { id = moderation.ModerationId }, moderation);
+            var createdModeration = await _userModerationsService.CreateUserModerationAsync(moderation);
+            return CreatedAtAction(nameof(GetUserModeration), new { id = createdModeration.ModerationId }, createdModeration);
         }
 
         // PUT: api/UserModerations/5
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateUserModeration(int id, UserModeration moderation)
         {
-            if (id != moderation.ModerationId)
+            var success = await _userModerationsService.UpdateUserModerationAsync(id, moderation);
+            if (!success)
                 return BadRequest();
-
-            _context.Entry(moderation).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!UserModerationExists(id))
-                    return NotFound();
-                throw;
-            }
 
             return NoContent();
         }
@@ -81,19 +62,11 @@ namespace WebApplication2.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteUserModeration(int id)
         {
-            var moderation = await _context.UserModerations.FindAsync(id);
-            if (moderation == null)
+            var success = await _userModerationsService.DeleteUserModerationAsync(id);
+            if (!success)
                 return NotFound();
 
-            _context.UserModerations.Remove(moderation);
-            await _context.SaveChangesAsync();
-
             return NoContent();
-        }
-
-        private bool UserModerationExists(int id)
-        {
-            return _context.UserModerations.Any(e => e.ModerationId == id);
         }
     }
 }

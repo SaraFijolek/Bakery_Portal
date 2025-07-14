@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 using WebApplication2.Properties.Data;
 using WebApplication2.Properties.Models;
+using WebApplication2.Properties.Services.Interfaces;
 
 namespace WebApplication2.Controllers
 {
@@ -13,70 +14,50 @@ namespace WebApplication2.Controllers
     [Route("api/[controller]")]
     public class AdminPermissionsController : ControllerBase
     {
-        private readonly AppDbContext _context;
+        private readonly IAdminPermissionsService _adminPermissionsService;
 
-        public AdminPermissionsController(AppDbContext context)
+        public AdminPermissionsController(IAdminPermissionsService adminPermissionsService)
         {
-            _context = context;
+            _adminPermissionsService = adminPermissionsService;
         }
 
         // GET: api/AdminPermissions
         [HttpGet]
         public async Task<ActionResult<IEnumerable<AdminPermission>>> GetAdminPermissions()
         {
-            return await _context.AdminPermissions.ToListAsync();
+            var permissions = await _adminPermissionsService.GetAllAdminPermissionsAsync();
+            return Ok(permissions);
         }
 
         // GET: api/AdminPermissions/5
         [HttpGet("{id}")]
         public async Task<ActionResult<AdminPermission>> GetAdminPermission(int id)
         {
-            var permission = await _context.AdminPermissions.FindAsync(id);
+            var permission = await _adminPermissionsService.GetAdminPermissionByIdAsync(id);
             if (permission == null)
             {
                 return NotFound();
             }
-
-            return permission;
+            return Ok(permission);
         }
 
         // POST: api/AdminPermissions
         [HttpPost]
         public async Task<ActionResult<AdminPermission>> CreateAdminPermission(AdminPermission permission)
         {
-            _context.AdminPermissions.Add(permission);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction(nameof(GetAdminPermission), new { id = permission.PermissionId }, permission);
+            var createdPermission = await _adminPermissionsService.CreateAdminPermissionAsync(permission);
+            return CreatedAtAction(nameof(GetAdminPermission), new { id = createdPermission.PermissionId }, createdPermission);
         }
 
         // PUT: api/AdminPermissions/5
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateAdminPermission(int id, AdminPermission permission)
         {
-            if (id != permission.PermissionId)
+            var result = await _adminPermissionsService.UpdateAdminPermissionAsync(id, permission);
+            if (!result)
             {
                 return BadRequest();
             }
-
-            _context.Entry(permission).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!AdminPermissionExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
             return NoContent();
         }
 
@@ -84,21 +65,12 @@ namespace WebApplication2.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteAdminPermission(int id)
         {
-            var permission = await _context.AdminPermissions.FindAsync(id);
-            if (permission == null)
+            var result = await _adminPermissionsService.DeleteAdminPermissionAsync(id);
+            if (!result)
             {
                 return NotFound();
             }
-
-            _context.AdminPermissions.Remove(permission);
-            await _context.SaveChangesAsync();
-
             return NoContent();
-        }
-
-        private bool AdminPermissionExists(int id)
-        {
-            return _context.AdminPermissions.Any(e => e.PermissionId == id);
         }
     }
 }

@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using WebApplication2.Properties.Data;
 using WebApplication2.Properties.Models;
+using WebApplication2.Properties.Services.Interfaces;
 
 
 namespace WebApplication2.Controllers
@@ -13,68 +14,50 @@ namespace WebApplication2.Controllers
     [Route("api/[controller]")]
     public class AdminRolePermissionsController : ControllerBase
     {
-        private readonly AppDbContext _context;
+        private readonly IAdminRolePermissionsService _adminRolePermissionsService;
 
-        public AdminRolePermissionsController(AppDbContext context)
+        public AdminRolePermissionsController(IAdminRolePermissionsService adminRolePermissionsService)
         {
-            _context = context;
+            _adminRolePermissionsService = adminRolePermissionsService;
         }
 
         // GET: api/AdminRolePermissions
         [HttpGet]
         public async Task<ActionResult<IEnumerable<AdminRolePermission>>> GetAdminRolePermissions()
         {
-            return await _context.AdminRolePermissions
-                .Include(rp => rp.AdminPermission)
-                .ToListAsync();
+            var rolePermissions = await _adminRolePermissionsService.GetAllAdminRolePermissionsAsync();
+            return Ok(rolePermissions);
         }
 
         // GET: api/AdminRolePermissions/5
         [HttpGet("{id}")]
         public async Task<ActionResult<AdminRolePermission>> GetAdminRolePermission(int id)
         {
-            var rolePermission = await _context.AdminRolePermissions
-                .Include(rp => rp.AdminPermission)
-                .FirstOrDefaultAsync(rp => rp.RolePermissionId == id);
-
+            var rolePermission = await _adminRolePermissionsService.GetAdminRolePermissionByIdAsync(id);
             if (rolePermission == null)
             {
                 return NotFound();
             }
-
-            return rolePermission;
+            return Ok(rolePermission);
         }
 
         // POST: api/AdminRolePermissions
         [HttpPost]
         public async Task<ActionResult<AdminRolePermission>> CreateAdminRolePermission(AdminRolePermission rolePermission)
         {
-            _context.AdminRolePermissions.Add(rolePermission);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction(nameof(GetAdminRolePermission), new { id = rolePermission.RolePermissionId }, rolePermission);
+            var createdRolePermission = await _adminRolePermissionsService.CreateAdminRolePermissionAsync(rolePermission);
+            return CreatedAtAction(nameof(GetAdminRolePermission), new { id = createdRolePermission.RolePermissionId }, createdRolePermission);
         }
 
         // PUT: api/AdminRolePermissions/5
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateAdminRolePermission(int id, AdminRolePermission rolePermission)
         {
-            if (id != rolePermission.RolePermissionId)
+            var result = await _adminRolePermissionsService.UpdateAdminRolePermissionAsync(id, rolePermission);
+            if (!result)
+            {
                 return BadRequest();
-
-            _context.Entry(rolePermission).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
             }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!AdminRolePermissionExists(id))
-                    return NotFound();
-                throw;
-            }
-
             return NoContent();
         }
 
@@ -82,19 +65,12 @@ namespace WebApplication2.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteAdminRolePermission(int id)
         {
-            var rolePermission = await _context.AdminRolePermissions.FindAsync(id);
-            if (rolePermission == null)
+            var result = await _adminRolePermissionsService.DeleteAdminRolePermissionAsync(id);
+            if (!result)
+            {
                 return NotFound();
-
-            _context.AdminRolePermissions.Remove(rolePermission);
-            await _context.SaveChangesAsync();
-
+            }
             return NoContent();
-        }
-
-        private bool AdminRolePermissionExists(int id)
-        {
-            return _context.AdminRolePermissions.Any(e => e.RolePermissionId == id);
         }
     }
 }

@@ -1,10 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using WebApplication2.Properties.Data;
 using WebApplication2.Properties.Models;
+using WebApplication2.Properties.Services.Interfaces;
 
 
 namespace WebApplication2.Controllers
@@ -13,88 +14,68 @@ namespace WebApplication2.Controllers
     [Route("api/[controller]")]
     public class RatingsController : ControllerBase
     {
-        private readonly AppDbContext _context;
+        private readonly IRatingsService _ratingsService;
 
-        public RatingsController(AppDbContext context)
+        public RatingsController(IRatingsService ratingsService)
         {
-            _context = context;
+            _ratingsService = ratingsService;
         }
 
         // GET: api/Ratings
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Rating>>> GetRatings()
         {
-            return await _context.Ratings
-                .Include(r => r.FromUser)
-                .Include(r => r.ToUser)
-                .ToListAsync();
+            var ratings = await _ratingsService.GetRatingsAsync();
+            return Ok(ratings);
         }
 
         // GET: api/Ratings/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Rating>> GetRating(int id)
         {
-            var rating = await _context.Ratings
-                .Include(r => r.FromUser)
-                .Include(r => r.ToUser)
-                .FirstOrDefaultAsync(r => r.RatingId == id);
-
+            var rating = await _ratingsService.GetRatingByIdAsync(id);
             if (rating == null)
                 return NotFound();
 
-            return rating;
+            return Ok(rating);
         }
 
         // POST: api/Ratings
         [HttpPost]
         public async Task<ActionResult<Rating>> CreateRating(Rating rating)
         {
-            _context.Ratings.Add(rating);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction(nameof(GetRating), new { id = rating.RatingId }, rating);
+            var createdRating = await _ratingsService.CreateRatingAsync(rating);
+            return CreatedAtAction(nameof(GetRating), new { id = createdRating.RatingId }, createdRating);
         }
 
         // PUT: api/Ratings/5
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateRating(int id, Rating rating)
         {
-            if (id != rating.RatingId)
-                return BadRequest();
-
-            _context.Entry(rating).State = EntityState.Modified;
-
             try
             {
-                await _context.SaveChangesAsync();
+                await _ratingsService.UpdateRatingAsync(id, rating);
+                return NoContent();
             }
-            catch (DbUpdateConcurrencyException)
+            catch (ArgumentException)
             {
-                if (!RatingExists(id))
-                    return NotFound();
-                throw;
+                return BadRequest();
             }
-
-            return NoContent();
+            catch (KeyNotFoundException)
+            {
+                return NotFound();
+            }
         }
 
         // DELETE: api/Ratings/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteRating(int id)
         {
-            var rating = await _context.Ratings.FindAsync(id);
-            if (rating == null)
+            var deleted = await _ratingsService.DeleteRatingAsync(id);
+            if (!deleted)
                 return NotFound();
 
-            _context.Ratings.Remove(rating);
-            await _context.SaveChangesAsync();
-
             return NoContent();
-        }
-
-        private bool RatingExists(int id)
-        {
-            return _context.Ratings.Any(e => e.RatingId == id);
         }
     }
 }

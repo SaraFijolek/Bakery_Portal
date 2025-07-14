@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using WebApplication2.Properties.Data;
 using WebApplication2.Properties.Models;
+using WebApplication2.Properties.Services.Interfaces;
 
 
 namespace WebApplication2.Controllers
@@ -13,74 +14,50 @@ namespace WebApplication2.Controllers
     [Route("api/[controller]")]
     public class AdminsController : ControllerBase
     {
-        private readonly AppDbContext _context;
+        private readonly IAdminsService _adminsService;
 
-        public AdminsController(AppDbContext context)
+        public AdminsController(IAdminsService adminsService)
         {
-            _context = context;
+            _adminsService = adminsService;
         }
 
         // GET: api/Admins
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Admin>>> GetAdmins()
         {
-            return await _context.Admins
-                .Include(a => a.AdminSessions)
-                .Include(a => a.AdminAuditLogs)
-                .Include(a => a.UserModerations)
-                .Include(a => a.AdModerations)
-                .Include(a => a.ReportedContents)
-                .ToListAsync();
+            var admins = await _adminsService.GetAllAdminsAsync();
+            return Ok(admins);
         }
 
         // GET: api/Admins/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Admin>> GetAdmin(int id)
         {
-            var admin = await _context.Admins
-                .Include(a => a.AdminSessions)
-                .Include(a => a.AdminAuditLogs)
-                .Include(a => a.UserModerations)
-                .Include(a => a.AdModerations)
-                .Include(a => a.ReportedContents)
-                .FirstOrDefaultAsync(a => a.AdminId == id);
-
+            var admin = await _adminsService.GetAdminByIdAsync(id);
             if (admin == null)
+            {
                 return NotFound();
-
-            return admin;
+            }
+            return Ok(admin);
         }
 
         // POST: api/Admins
         [HttpPost]
         public async Task<ActionResult<Admin>> CreateAdmin(Admin admin)
         {
-            _context.Admins.Add(admin);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction(nameof(GetAdmin), new { id = admin.AdminId }, admin);
+            var createdAdmin = await _adminsService.CreateAdminAsync(admin);
+            return CreatedAtAction(nameof(GetAdmin), new { id = createdAdmin.AdminId }, createdAdmin);
         }
 
         // PUT: api/Admins/5
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateAdmin(int id, Admin admin)
         {
-            if (id != admin.AdminId)
+            var result = await _adminsService.UpdateAdminAsync(id, admin);
+            if (!result)
+            {
                 return BadRequest();
-
-            _context.Entry(admin).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
             }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!AdminExists(id))
-                    return NotFound();
-                throw;
-            }
-
             return NoContent();
         }
 
@@ -88,18 +65,12 @@ namespace WebApplication2.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteAdmin(int id)
         {
-            var admin = await _context.Admins.FindAsync(id);
-            if (admin == null)
+            var result = await _adminsService.DeleteAdminAsync(id);
+            if (!result)
+            {
                 return NotFound();
-
-            _context.Admins.Remove(admin);
-            await _context.SaveChangesAsync();
+            }
             return NoContent();
-        }
-
-        private bool AdminExists(int id)
-        {
-            return _context.Admins.Any(e => e.AdminId == id);
         }
     }
 }

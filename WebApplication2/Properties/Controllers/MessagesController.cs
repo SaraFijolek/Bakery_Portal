@@ -5,7 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using WebApplication2.Properties.Data;
 using WebApplication2.Properties.Models;
-
+using WebApplication2.Properties.Services.Interfaces;
 
 namespace WebApplication2.Controllers
 {
@@ -13,88 +13,68 @@ namespace WebApplication2.Controllers
     [Route("api/[controller]")]
     public class MessagesController : ControllerBase
     {
-        private readonly AppDbContext _context;
+        private readonly IMessagesService _messagesService;
 
-        public MessagesController(AppDbContext context)
+        public MessagesController(IMessagesService messagesService)
         {
-            _context = context;
+            _messagesService = messagesService;
         }
 
         // GET: api/Messages
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Message>>> GetMessages()
         {
-            return await _context.Messages
-                .Include(m => m.Sender)
-                .Include(m => m.Receiver)
-                .ToListAsync();
+            var messages = await _messagesService.GetAllMessagesAsync();
+            return Ok(messages);
         }
 
         // GET: api/Messages/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Message>> GetMessage(int id)
         {
-            var message = await _context.Messages
-                .Include(m => m.Sender)
-                .Include(m => m.Receiver)
-                .FirstOrDefaultAsync(m => m.MessageId == id);
-
+            var message = await _messagesService.GetMessageAsync(id);
             if (message == null)
                 return NotFound();
 
-            return message;
+            return Ok(message);
         }
 
         // POST: api/Messages
         [HttpPost]
         public async Task<ActionResult<Message>> CreateMessage(Message message)
         {
-            _context.Messages.Add(message);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction(nameof(GetMessage), new { id = message.MessageId }, message);
+            var createdMessage = await _messagesService.CreateMessageAsync(message);
+            return CreatedAtAction(nameof(GetMessage), new { id = createdMessage.MessageId }, createdMessage);
         }
 
         // PUT: api/Messages/5
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateMessage(int id, Message message)
         {
-            if (id != message.MessageId)
-                return BadRequest();
-
-            _context.Entry(message).State = EntityState.Modified;
-
             try
             {
-                await _context.SaveChangesAsync();
+                await _messagesService.UpdateMessageAsync(id, message);
+                return NoContent();
             }
-            catch (DbUpdateConcurrencyException)
+            catch (ArgumentException)
             {
-                if (!MessageExists(id))
-                    return NotFound();
-                throw;
+                return BadRequest();
             }
-
-            return NoContent();
+            catch (KeyNotFoundException)
+            {
+                return NotFound();
+            }
         }
 
         // DELETE: api/Messages/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteMessage(int id)
         {
-            var message = await _context.Messages.FindAsync(id);
-            if (message == null)
+            var deleted = await _messagesService.DeleteMessageAsync(id);
+            if (!deleted)
                 return NotFound();
 
-            _context.Messages.Remove(message);
-            await _context.SaveChangesAsync();
-
             return NoContent();
-        }
-
-        private bool MessageExists(int id)
-        {
-            return _context.Messages.Any(e => e.MessageId == id);
         }
     }
 }

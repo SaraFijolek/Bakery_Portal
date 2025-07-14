@@ -3,8 +3,24 @@
   "WorkspaceRootPath": "C:\\Users\\saras\\OneDrive\\Dokumenty\\programowanie-projekty\\C#\\WebApplication2\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{83D25DBD-1DEC-441A-B080-7DD17F9137D1}|WebApplication2\\WebApplication2.csproj|c:\\users\\saras\\onedrive\\dokumenty\\programowanie-projekty\\c#\\webapplication2\\webapplication2\\properties\\models\\usermoderation.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{83D25DBD-1DEC-441A-B080-7DD17F9137D1}|WebApplication2\\WebApplication2.csproj|solutionrelative:webapplication2\\properties\\models\\usermoderation.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{83D25DBD-1DEC-441A-B080-7DD17F9137D1}|WebApplication2\\WebApplication2.csproj|c:\\users\\saras\\onedrive\\dokumenty\\programowanie-projekty\\c#\\webapplication2\\webapplication2\\properties\\controllers\\usermoderationscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{83D25DBD-1DEC-441A-B080-7DD17F9137D1}|WebApplication2\\WebApplication2.csproj|solutionrelative:webapplication2\\properties\\controllers\\usermoderationscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{83D25DBD-1DEC-441A-B080-7DD17F9137D1}|WebApplication2\\WebApplication2.csproj|c:\\users\\saras\\onedrive\\dokumenty\\programowanie-projekty\\c#\\webapplication2\\webapplication2\\properties\\controllers\\usercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{83D25DBD-1DEC-441A-B080-7DD17F9137D1}|WebApplication2\\WebApplication2.csproj|solutionrelative:webapplication2\\properties\\controllers\\usercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{83D25DBD-1DEC-441A-B080-7DD17F9137D1}|WebApplication2\\WebApplication2.csproj|c:\\users\\saras\\onedrive\\dokumenty\\programowanie-projekty\\c#\\webapplication2\\webapplication2\\serviceextension.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{83D25DBD-1DEC-441A-B080-7DD17F9137D1}|WebApplication2\\WebApplication2.csproj|solutionrelative:webapplication2\\serviceextension.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{83D25DBD-1DEC-441A-B080-7DD17F9137D1}|WebApplication2\\WebApplication2.csproj|c:\\users\\saras\\onedrive\\dokumenty\\programowanie-projekty\\c#\\webapplication2\\webapplication2\\properties\\services\\userservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{83D25DBD-1DEC-441A-B080-7DD17F9137D1}|WebApplication2\\WebApplication2.csproj|solutionrelative:webapplication2\\properties\\services\\userservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{83D25DBD-1DEC-441A-B080-7DD17F9137D1}|WebApplication2\\WebApplication2.csproj|c:\\users\\saras\\onedrive\\dokumenty\\programowanie-projekty\\c#\\webapplication2\\webapplication2\\properties\\services\\interfaces\\iuserservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{83D25DBD-1DEC-441A-B080-7DD17F9137D1}|WebApplication2\\WebApplication2.csproj|solutionrelative:webapplication2\\properties\\services\\interfaces\\iuserservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -19,14 +35,66 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "UserModeration.cs",
-              "DocumentMoniker": "C:\\Users\\saras\\OneDrive\\Dokumenty\\programowanie-projekty\\C#\\WebApplication2\\WebApplication2\\Properties\\Models\\UserModeration.cs",
-              "RelativeDocumentMoniker": "WebApplication2\\Properties\\Models\\UserModeration.cs",
-              "ToolTip": "C:\\Users\\saras\\OneDrive\\Dokumenty\\programowanie-projekty\\C#\\WebApplication2\\WebApplication2\\Properties\\Models\\UserModeration.cs",
-              "RelativeToolTip": "WebApplication2\\Properties\\Models\\UserModeration.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABcAAAAvAAAAAAAAAA==",
+              "Title": "UserModerationsController.cs",
+              "DocumentMoniker": "C:\\Users\\saras\\OneDrive\\Dokumenty\\programowanie-projekty\\C#\\WebApplication2\\WebApplication2\\Properties\\Controllers\\UserModerationsController.cs",
+              "RelativeDocumentMoniker": "WebApplication2\\Properties\\Controllers\\UserModerationsController.cs",
+              "ToolTip": "C:\\Users\\saras\\OneDrive\\Dokumenty\\programowanie-projekty\\C#\\WebApplication2\\WebApplication2\\Properties\\Controllers\\UserModerationsController.cs",
+              "RelativeToolTip": "WebApplication2\\Properties\\Controllers\\UserModerationsController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-07-08T11:05:24.836Z",
+              "WhenOpened": "2025-07-11T13:26:39.237Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "IUserService.cs",
+              "DocumentMoniker": "C:\\Users\\saras\\OneDrive\\Dokumenty\\programowanie-projekty\\C#\\WebApplication2\\WebApplication2\\Properties\\Services\\Interfaces\\IUserService.cs",
+              "RelativeDocumentMoniker": "WebApplication2\\Properties\\Services\\Interfaces\\IUserService.cs",
+              "ToolTip": "C:\\Users\\saras\\OneDrive\\Dokumenty\\programowanie-projekty\\C#\\WebApplication2\\WebApplication2\\Properties\\Services\\Interfaces\\IUserService.cs",
+              "RelativeToolTip": "WebApplication2\\Properties\\Services\\Interfaces\\IUserService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABEAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-11T11:22:03.055Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "UserController.cs",
+              "DocumentMoniker": "C:\\Users\\saras\\OneDrive\\Dokumenty\\programowanie-projekty\\C#\\WebApplication2\\WebApplication2\\Properties\\Controllers\\UserController.cs",
+              "RelativeDocumentMoniker": "WebApplication2\\Properties\\Controllers\\UserController.cs",
+              "ToolTip": "C:\\Users\\saras\\OneDrive\\Dokumenty\\programowanie-projekty\\C#\\WebApplication2\\WebApplication2\\Properties\\Controllers\\UserController.cs",
+              "RelativeToolTip": "WebApplication2\\Properties\\Controllers\\UserController.cs",
+              "ViewState": "AgIAACkAAAAAAAAAAAAwwEYAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-11T11:18:41.656Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "UserService.cs",
+              "DocumentMoniker": "C:\\Users\\saras\\OneDrive\\Dokumenty\\programowanie-projekty\\C#\\WebApplication2\\WebApplication2\\Properties\\Services\\UserService.cs",
+              "RelativeDocumentMoniker": "WebApplication2\\Properties\\Services\\UserService.cs",
+              "ToolTip": "C:\\Users\\saras\\OneDrive\\Dokumenty\\programowanie-projekty\\C#\\WebApplication2\\WebApplication2\\Properties\\Services\\UserService.cs",
+              "RelativeToolTip": "WebApplication2\\Properties\\Services\\UserService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAADUAAAAIAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-11T11:20:12.984Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "ServiceExtension.cs",
+              "DocumentMoniker": "C:\\Users\\saras\\OneDrive\\Dokumenty\\programowanie-projekty\\C#\\WebApplication2\\WebApplication2\\ServiceExtension.cs",
+              "RelativeDocumentMoniker": "WebApplication2\\ServiceExtension.cs",
+              "ToolTip": "C:\\Users\\saras\\OneDrive\\Dokumenty\\programowanie-projekty\\C#\\WebApplication2\\WebApplication2\\ServiceExtension.cs",
+              "RelativeToolTip": "WebApplication2\\ServiceExtension.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABkAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-10T10:55:25.156Z",
               "EditorCaption": ""
             }
           ]

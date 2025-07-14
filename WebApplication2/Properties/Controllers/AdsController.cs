@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using WebApplication2.Models;
 using WebApplication2.Properties.Data;
 using WebApplication2.Properties.Models;
+using WebApplication2.Properties.Services.Interfaces;
 
 namespace WebApplication2.Controllers
 {
@@ -13,75 +14,56 @@ namespace WebApplication2.Controllers
     [Route("api/[controller]")]
     public class AdsController : ControllerBase
     {
-        private readonly AppDbContext _context;
+        private readonly IAdsService _adsService;
 
-        public AdsController(AppDbContext context)
+        public AdsController(IAdsService adsService)
         {
-            _context = context;
+            _adsService = adsService;
         }
 
-        
+        // GET: api/Ads
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Ad>>> GetAds()
         {
-            return await _context.Ads
-                .Include(a => a.User)
-                .Include(a => a.Subcategory)
-                .ToListAsync();
+            var ads = await _adsService.GetAllAdsAsync();
+            return Ok(ads);
         }
 
-        
+        // GET: api/Ads/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Ad>> GetAd(int id)
         {
-            var ad = await _context.Ads
-                .Include(a => a.User)
-                .Include(a => a.Subcategory)
-                .FirstOrDefaultAsync(a => a.AdId == id);
+            var ad = await _adsService.GetAdByIdAsync(id);
 
             if (ad == null)
             {
                 return NotFound();
             }
 
-            return ad;
+            return Ok(ad);
         }
 
-       
+        // POST: api/Ads
         [HttpPost]
         public async Task<ActionResult<Ad>> CreateAd(Ad ad)
         {
-            _context.Ads.Add(ad);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction(nameof(GetAd), new { id = ad.AdId }, ad);
+            var createdAd = await _adsService.CreateAdAsync(ad);
+            return CreatedAtAction(nameof(GetAd), new { id = createdAd.AdId }, createdAd);
         }
 
-        
+        // PUT: api/Ads/5
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateAd(int id, Ad ad)
         {
-            if (id != ad.AdId)
-            {
-                return BadRequest();
-            }
+            var result = await _adsService.UpdateAdAsync(id, ad);
 
-            _context.Entry(ad).State = EntityState.Modified;
-
-            try
+            if (!result)
             {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!AdExists(id))
+                if (id != ad.AdId)
                 {
-                    return NotFound();
+                    return BadRequest();
                 }
-                else
-                {
-                    throw;
-                }
+                return NotFound();
             }
 
             return NoContent();
@@ -91,21 +73,14 @@ namespace WebApplication2.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteAd(int id)
         {
-            var ad = await _context.Ads.FindAsync(id);
-            if (ad == null)
+            var result = await _adsService.DeleteAdAsync(id);
+
+            if (!result)
             {
                 return NotFound();
             }
 
-            _context.Ads.Remove(ad);
-            await _context.SaveChangesAsync();
-
             return NoContent();
-        }
-
-        private bool AdExists(int id)
-        {
-            return _context.Ads.Any(e => e.AdId == id);
         }
     }
 }
