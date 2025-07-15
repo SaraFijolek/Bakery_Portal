@@ -166,3 +166,4 @@ C:\Users\saras\OneDrive\Dokumenty\programowanie-projekty\C#\WebApplication2\WebA
 C:\Users\saras\OneDrive\Dokumenty\programowanie-projekty\C#\WebApplication2\WebApplication2\obj\Debug\net8.0\WebApplication2.pdb
 C:\Users\saras\OneDrive\Dokumenty\programowanie-projekty\C#\WebApplication2\WebApplication2\obj\Debug\net8.0\WebApplication2.genruntimeconfig.cache
 C:\Users\saras\OneDrive\Dokumenty\programowanie-projekty\C#\WebApplication2\WebApplication2\obj\Debug\net8.0\ref\WebApplication2.dll
+C:\Users\saras\OneDrive\Dokumenty\programowanie-projekty\C#\WebApplication2\WebApplication2\obj\Debug\net8.0\WebApplication2.sourcelink.json

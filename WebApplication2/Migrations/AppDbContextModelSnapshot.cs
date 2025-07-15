@@ -824,9 +824,9 @@ namespace WebApplication2.Migrations
                         .IsRequired();
 
                     b.HasOne("WebApplication2.Properties.Models.User", "User")
-                        .WithMany()
+                        .WithMany("Comments")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Ad");
@@ -837,15 +837,15 @@ namespace WebApplication2.Migrations
             modelBuilder.Entity("WebApplication2.Properties.Models.Message", b =>
                 {
                     b.HasOne("WebApplication2.Properties.Models.User", "Receiver")
-                        .WithMany()
+                        .WithMany("ReceivedMessages")
                         .HasForeignKey("ReceiverId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("WebApplication2.Properties.Models.User", "Sender")
-                        .WithMany()
+                        .WithMany("SentMessages")
                         .HasForeignKey("SenderId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Receiver");
@@ -873,15 +873,15 @@ namespace WebApplication2.Migrations
             modelBuilder.Entity("WebApplication2.Properties.Models.Rating", b =>
                 {
                     b.HasOne("WebApplication2.Properties.Models.User", "FromUser")
-                        .WithMany()
+                        .WithMany("GivenRatings")
                         .HasForeignKey("FromUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("WebApplication2.Properties.Models.User", "ToUser")
-                        .WithMany()
+                        .WithMany("ReceivedRatings")
                         .HasForeignKey("ToUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("FromUser");
@@ -956,6 +956,19 @@ namespace WebApplication2.Migrations
                     b.Navigation("ReportedContents");
 
                     b.Navigation("UserModerations");
+                });
+
+            modelBuilder.Entity("WebApplication2.Properties.Models.User", b =>
+                {
+                    b.Navigation("Comments");
+
+                    b.Navigation("GivenRatings");
+
+                    b.Navigation("ReceivedMessages");
+
+                    b.Navigation("ReceivedRatings");
+
+                    b.Navigation("SentMessages");
                 });
 #pragma warning restore 612, 618
         }

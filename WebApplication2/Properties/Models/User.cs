@@ -91,6 +91,17 @@ namespace WebApplication2.Properties.Models
             {
                 return AuthProvider == "facebook";
             }
-        }
+
+        public ICollection<Message> SentMessages { get; set; } = new List<Message>();
+
+        public ICollection<Message> ReceivedMessages { get; set; } = new List<Message>();
+
+        public ICollection<Rating> GivenRatings { get; set; } = new List<Rating>();
+
+        public ICollection<Rating> ReceivedRatings { get; set; } = new List<Rating>();
+
+        
+        public ICollection<Comment> Comments { get; set; } = new List<Comment>();
+    }
     }
 
