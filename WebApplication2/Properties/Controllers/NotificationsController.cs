@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using WebApplication2.Models;
 using WebApplication2.Properties.Data;
 using WebApplication2.Properties.Models;
+using WebApplication2.Properties.Services.Interfaces;
 
 
 namespace WebApplication2.Controllers
@@ -14,88 +15,68 @@ namespace WebApplication2.Controllers
     [Route("api/[controller]")]
     public class NotificationsController : ControllerBase
     {
-        private readonly AppDbContext _context;
+        private readonly INotificationService _notificationService;
 
-        public NotificationsController(AppDbContext context)
+        public NotificationsController(INotificationService notificationService)
         {
-            _context = context;
+            _notificationService = notificationService;
         }
 
         // GET: api/Notifications
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Notification>>> GetNotifications()
         {
-            return await _context.Notifications
-                .Include(n => n.User)
-                .Include(n => n.Ad)
-                .ToListAsync();
+            var notifications = await _notificationService.GetNotificationsAsync();
+            return Ok(notifications);
         }
 
         // GET: api/Notifications/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Notification>> GetNotification(int id)
         {
-            var notification = await _context.Notifications
-                .Include(n => n.User)
-                .Include(n => n.Ad)
-                .FirstOrDefaultAsync(n => n.NotificationId == id);
-
+            var notification = await _notificationService.GetNotificationByIdAsync(id);
             if (notification == null)
                 return NotFound();
 
-            return notification;
+            return Ok(notification);
         }
 
         // POST: api/Notifications
         [HttpPost]
         public async Task<ActionResult<Notification>> CreateNotification(Notification notification)
         {
-            _context.Notifications.Add(notification);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction(nameof(GetNotification), new { id = notification.NotificationId }, notification);
+            var createdNotification = await _notificationService.CreateNotificationAsync(notification);
+            return CreatedAtAction(nameof(GetNotification), new { id = createdNotification.NotificationId }, createdNotification);
         }
 
         // PUT: api/Notifications/5
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateNotification(int id, Notification notification)
         {
-            if (id != notification.NotificationId)
-                return BadRequest();
-
-            _context.Entry(notification).State = EntityState.Modified;
-
             try
             {
-                await _context.SaveChangesAsync();
+                await _notificationService.UpdateNotificationAsync(id, notification);
+                return NoContent();
             }
-            catch (DbUpdateConcurrencyException)
+            catch (ArgumentException)
             {
-                if (!NotificationExists(id))
-                    return NotFound();
-                throw;
+                return BadRequest();
             }
-
-            return NoContent();
+            catch (KeyNotFoundException)
+            {
+                return NotFound();
+            }
         }
 
         // DELETE: api/Notifications/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteNotification(int id)
         {
-            var notification = await _context.Notifications.FindAsync(id);
-            if (notification == null)
+            var deleted = await _notificationService.DeleteNotificationAsync(id);
+            if (!deleted)
                 return NotFound();
 
-            _context.Notifications.Remove(notification);
-            await _context.SaveChangesAsync();
-
             return NoContent();
-        }
-
-        private bool NotificationExists(int id)
-        {
-            return _context.Notifications.Any(e => e.NotificationId == id);
         }
     }
 }

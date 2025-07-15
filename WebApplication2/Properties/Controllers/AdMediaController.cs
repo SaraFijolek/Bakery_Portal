@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using WebApplication2.Models;
 using WebApplication2.Properties.Data;
 using WebApplication2.Properties.Models;
+using WebApplication2.Properties.Services.Interfaces;
 
 namespace WebApplication2.Controllers
 {
@@ -13,73 +14,56 @@ namespace WebApplication2.Controllers
     [Route("api/[controller]")]
     public class AdMediaController : ControllerBase
     {
-        private readonly AppDbContext _context;
+        private readonly IAdMadiaService _adMadiaService;
 
-        public AdMediaController(AppDbContext context)
+        public AdMediaController(IAdMadiaService adMadiaService)
         {
-            _context = context;
+            _adMadiaService = adMadiaService;
         }
 
         // GET: api/AdMedia
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Admedia>>> GetAdMedia()
         {
-            return await _context.Admedias
-                .Include(m => m.Ad)
-                .ToListAsync();
+            var adMedia = await _adMadiaService.GetAllAdMediaAsync();
+            return Ok(adMedia);
         }
 
         // GET: api/AdMedia/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Admedia>> GetAdMedia(int id)
         {
-            var adMedia = await _context.Admedias
-                .Include(m => m.Ad)
-                .FirstOrDefaultAsync(m => m.MediaId == id);
+            var adMedia = await _adMadiaService.GetAdMediaByIdAsync(id);
 
             if (adMedia == null)
             {
                 return NotFound();
             }
 
-            return adMedia;
+            return Ok(adMedia);
         }
 
         // POST: api/AdMedia
         [HttpPost]
         public async Task<ActionResult<Admedia>> CreateAdMedia(Admedia adMedia)
         {
-            _context.Admedias.Add(adMedia);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction(nameof(GetAdMedia), new { id = adMedia.MediaId }, adMedia);
+            var createdAdMedia = await _adMadiaService.CreateAdMediaAsync(adMedia);
+            return CreatedAtAction(nameof(GetAdMedia), new { id = createdAdMedia.MediaId }, createdAdMedia);
         }
 
         // PUT: api/AdMedia/5
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateAdMedia(int id, Admedia adMedia)
         {
-            if (id != adMedia.MediaId)
-            {
-                return BadRequest();
-            }
+            var result = await _adMadiaService.UpdateAdMediaAsync(id, adMedia);
 
-            _context.Entry(adMedia).State = EntityState.Modified;
-
-            try
+            if (!result)
             {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!AdMediaExists(id))
+                if (id != adMedia.MediaId)
                 {
-                    return NotFound();
+                    return BadRequest();
                 }
-                else
-                {
-                    throw;
-                }
+                return NotFound();
             }
 
             return NoContent();
@@ -89,21 +73,14 @@ namespace WebApplication2.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteAdMedia(int id)
         {
-            var adMedia = await _context.Admedias.FindAsync(id);
-            if (adMedia == null)
+            var result = await _adMadiaService.DeleteAdMediaAsync(id);
+
+            if (!result)
             {
                 return NotFound();
             }
 
-            _context.Admedias.Remove(adMedia);
-            await _context.SaveChangesAsync();
-
             return NoContent();
-        }
-
-        private bool AdMediaExists(int id)
-        {
-            return _context.Admedias.Any(e => e.MediaId == id);
         }
     }
 }

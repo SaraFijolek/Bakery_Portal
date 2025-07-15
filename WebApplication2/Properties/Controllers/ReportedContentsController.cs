@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using WebApplication2.Models;
 using WebApplication2.Properties.Data;
 using WebApplication2.Properties.Models;
+using WebApplication2.Properties.Services.Interfaces;
 
 
 namespace WebApplication2.Controllers
@@ -14,88 +15,68 @@ namespace WebApplication2.Controllers
     [Route("api/[controller]")]
     public class ReportedContentsController : ControllerBase
     {
-        private readonly AppDbContext _context;
+        private readonly IReportedContentsService _reportedContentsService;
 
-        public ReportedContentsController(AppDbContext context)
+        public ReportedContentsController(IReportedContentsService reportedContentsService)
         {
-            _context = context;
+            _reportedContentsService = reportedContentsService;
         }
 
         // GET: api/ReportedContents
         [HttpGet]
         public async Task<ActionResult<IEnumerable<ReportedContent>>> GetReportedContents()
         {
-            return await _context.ReportedContents
-                .Include(r => r.ReporterUser)
-                .Include(r => r.Admin)
-                .ToListAsync();
+            var reportedContents = await _reportedContentsService.GetReportedContentsAsync();
+            return Ok(reportedContents);
         }
 
         // GET: api/ReportedContents/5
         [HttpGet("{id}")]
         public async Task<ActionResult<ReportedContent>> GetReportedContent(int id)
         {
-            var report = await _context.ReportedContents
-                .Include(r => r.ReporterUser)
-                .Include(r => r.Admin)
-                .FirstOrDefaultAsync(r => r.ReportId == id);
-
+            var report = await _reportedContentsService.GetReportedContentAsync(id);
             if (report == null)
                 return NotFound();
 
-            return report;
+            return Ok(report);
         }
 
         // POST: api/ReportedContents
         [HttpPost]
         public async Task<ActionResult<ReportedContent>> CreateReportedContent(ReportedContent report)
         {
-            _context.ReportedContents.Add(report);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction(nameof(GetReportedContent), new { id = report.ReportId }, report);
+            var createdReport = await _reportedContentsService.CreateReportedContentAsync(report);
+            return CreatedAtAction(nameof(GetReportedContent), new { id = createdReport.ReportId }, createdReport);
         }
 
         // PUT: api/ReportedContents/5
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateReportedContent(int id, ReportedContent report)
         {
-            if (id != report.ReportId)
-                return BadRequest();
-
-            _context.Entry(report).State = EntityState.Modified;
-
             try
             {
-                await _context.SaveChangesAsync();
+                await _reportedContentsService.UpdateReportedContentAsync(id, report);
+                return NoContent();
             }
-            catch (DbUpdateConcurrencyException)
+            catch (ArgumentException)
             {
-                if (!ReportedContentExists(id))
-                    return NotFound();
-                throw;
+                return BadRequest();
             }
-
-            return NoContent();
+            catch (KeyNotFoundException)
+            {
+                return NotFound();
+            }
         }
 
         // DELETE: api/ReportedContents/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteReportedContent(int id)
         {
-            var report = await _context.ReportedContents.FindAsync(id);
-            if (report == null)
+            var deleted = await _reportedContentsService.DeleteReportedContentAsync(id);
+            if (!deleted)
                 return NotFound();
 
-            _context.ReportedContents.Remove(report);
-            await _context.SaveChangesAsync();
-
             return NoContent();
-        }
-
-        private bool ReportedContentExists(int id)
-        {
-            return _context.ReportedContents.Any(e => e.ReportId == id);
         }
     }
 }

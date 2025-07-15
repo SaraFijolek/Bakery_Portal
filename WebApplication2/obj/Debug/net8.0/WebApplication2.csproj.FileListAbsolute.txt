@@ -166,3 +166,4 @@ C:\Users\saras\OneDrive\Dokumenty\programowanie-projekty\C#\WebApplication2\WebA
 C:\Users\saras\OneDrive\Dokumenty\programowanie-projekty\C#\WebApplication2\WebApplication2\bin\Debug\net8.0\runtimes\browser\lib\net8.0\System.Text.Encodings.Web.dll
 C:\Users\saras\OneDrive\Dokumenty\programowanie-projekty\C#\WebApplication2\WebApplication2\bin\Debug\net8.0\runtimes\win\lib\net6.0\System.Windows.Extensions.dll
 C:\Users\saras\OneDrive\Dokumenty\programowanie-projekty\C#\WebApplication2\WebApplication2\bin\Debug\net8.0\Microsoft.EntityFrameworkCore.InMemory.dll
+C:\Users\saras\OneDrive\Dokumenty\programowanie-projekty\C#\WebApplication2\WebApplication2\obj\Debug\net8.0\WebApplication2.sourcelink.json

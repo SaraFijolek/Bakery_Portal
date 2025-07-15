@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using WebApplication2.Properties.Data;
 using WebApplication2.Properties.Models;
+using WebApplication2.Properties.Services.Interfaces;
 
 namespace WebApplication2.Controllers
 {
@@ -12,97 +13,68 @@ namespace WebApplication2.Controllers
     [Route("api/[controller]")]
     public class SubcategoriesController : ControllerBase
     {
-        private readonly AppDbContext _context;
+        private readonly ISubcategoriesService _subcategoriesService;
 
-        public SubcategoriesController(AppDbContext context)
+        public SubcategoriesController(ISubcategoriesService subcategoriesService)
         {
-            _context = context;
+            _subcategoriesService = subcategoriesService;
         }
 
         // GET: api/Subcategories
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Subcategory>>> GetSubcategories()
         {
-            return await _context.Subcategories
-                .Include(sc => sc.Category)
-                .ToListAsync();
+            var subcategories = await _subcategoriesService.GetAllSubcategoriesAsync();
+            return Ok(subcategories);
         }
 
         // GET: api/Subcategories/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Subcategory>> GetSubcategory(int id)
         {
-            var subcategory = await _context.Subcategories
-                .Include(sc => sc.Category)
-                .FirstOrDefaultAsync(sc => sc.SubcategoryId == id);
-
+            var subcategory = await _subcategoriesService.GetSubcategoryAsync(id);
             if (subcategory == null)
-            {
                 return NotFound();
-            }
 
-            return subcategory;
+            return Ok(subcategory);
         }
 
         // POST: api/Subcategories
         [HttpPost]
         public async Task<ActionResult<Subcategory>> CreateSubcategory(Subcategory subcategory)
         {
-            _context.Subcategories.Add(subcategory);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction(nameof(GetSubcategory), new { id = subcategory.SubcategoryId }, subcategory);
+            var createdSubcategory = await _subcategoriesService.CreateSubcategoryAsync(subcategory);
+            return CreatedAtAction(nameof(GetSubcategory), new { id = createdSubcategory.SubcategoryId }, createdSubcategory);
         }
 
         // PUT: api/Subcategories/5
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateSubcategory(int id, Subcategory subcategory)
         {
-            if (id != subcategory.SubcategoryId)
+            try
+            {
+                await _subcategoriesService.UpdateSubcategoryAsync(id, subcategory);
+                return NoContent();
+            }
+            catch (ArgumentException)
             {
                 return BadRequest();
             }
-
-            _context.Entry(subcategory).State = EntityState.Modified;
-
-            try
+            catch (KeyNotFoundException)
             {
-                await _context.SaveChangesAsync();
+                return NotFound();
             }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!SubcategoryExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
         }
 
         // DELETE: api/Subcategories/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteSubcategory(int id)
         {
-            var subcategory = await _context.Subcategories.FindAsync(id);
-            if (subcategory == null)
-            {
+            var deleted = await _subcategoriesService.DeleteSubcategoryAsync(id);
+            if (!deleted)
                 return NotFound();
-            }
-
-            _context.Subcategories.Remove(subcategory);
-            await _context.SaveChangesAsync();
 
             return NoContent();
-        }
-
-        private bool SubcategoryExists(int id)
-        {
-            return _context.Subcategories.Any(e => e.SubcategoryId == id);
         }
     }
 }

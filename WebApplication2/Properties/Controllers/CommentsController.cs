@@ -3,9 +3,9 @@ using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using WebApplication2.Models;
 using WebApplication2.Properties.Data;
 using WebApplication2.Properties.Models;
+using WebApplication2.Properties.Services.Interfaces;
 
 
 namespace WebApplication2.Controllers
@@ -14,66 +14,56 @@ namespace WebApplication2.Controllers
     [Route("api/[controller]")]
     public class CommentsController : ControllerBase
     {
-        private readonly AppDbContext _context;
+        private readonly ICommentsService _commentsService;
 
-        public CommentsController(AppDbContext context)
+        public CommentsController(ICommentsService commentsService)
         {
-            _context = context;
+            _commentsService = commentsService;
         }
 
         // GET: api/Comments
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Comment>>> GetComments()
         {
-            return await _context.Comments
-                .Include(c => c.Ad)
-                .Include(c => c.User)
-                .ToListAsync();
+            var comments = await _commentsService.GetAllCommentsAsync();
+            return Ok(comments);
         }
 
         // GET: api/Comments/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Comment>> GetComment(int id)
         {
-            var comment = await _context.Comments
-                .Include(c => c.Ad)
-                .Include(c => c.User)
-                .FirstOrDefaultAsync(c => c.CommentId == id);
+            var comment = await _commentsService.GetCommentByIdAsync(id);
 
             if (comment == null)
+            {
                 return NotFound();
+            }
 
-            return comment;
+            return Ok(comment);
         }
 
         // POST: api/Comments
         [HttpPost]
         public async Task<ActionResult<Comment>> CreateComment(Comment comment)
         {
-            _context.Comments.Add(comment);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction(nameof(GetComment), new { id = comment.CommentId }, comment);
+            var createdComment = await _commentsService.CreateCommentAsync(comment);
+            return CreatedAtAction(nameof(GetComment), new { id = createdComment.CommentId }, createdComment);
         }
 
         // PUT: api/Comments/5
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateComment(int id, Comment comment)
         {
-            if (id != comment.CommentId)
-                return BadRequest();
+            var result = await _commentsService.UpdateCommentAsync(id, comment);
 
-            _context.Entry(comment).State = EntityState.Modified;
-
-            try
+            if (!result)
             {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!CommentExists(id))
-                    return NotFound();
-                throw;
+                if (id != comment.CommentId)
+                {
+                    return BadRequest();
+                }
+                return NotFound();
             }
 
             return NoContent();
@@ -83,19 +73,14 @@ namespace WebApplication2.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteComment(int id)
         {
-            var comment = await _context.Comments.FindAsync(id);
-            if (comment == null)
-                return NotFound();
+            var result = await _commentsService.DeleteCommentAsync(id);
 
-            _context.Comments.Remove(comment);
-            await _context.SaveChangesAsync();
+            if (!result)
+            {
+                return NotFound();
+            }
 
             return NoContent();
-        }
-
-        private bool CommentExists(int id)
-        {
-            return _context.Comments.Any(e => e.CommentId == id);
         }
     }
 }

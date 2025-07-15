@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using WebApplication2.Properties.Data;
 using WebApplication2.Properties.Models;
+using WebApplication2.Properties.Services.Interfaces;
 
 
 namespace WebApplication2.Controllers
@@ -13,70 +14,47 @@ namespace WebApplication2.Controllers
     [Route("api/[controller]")]
     public class UserSocialAuthController : ControllerBase
     {
-        private readonly AppDbContext _context;
+        private readonly IUserSocialAuthService _userSocialAuthService;
 
-        public UserSocialAuthController(AppDbContext context)
+        public UserSocialAuthController(IUserSocialAuthService userSocialAuthService)
         {
-            _context = context;
+            _userSocialAuthService = userSocialAuthService;
         }
 
         // GET: api/UserSocialAuth
         [HttpGet]
         public async Task<ActionResult<IEnumerable<UserSocialAuth>>> GetUserSocialAuths()
         {
-            return await _context.UserSocialAuths
-                .Include(ua => ua.User)
-                .ToListAsync();
+            var auths = await _userSocialAuthService.GetUserSocialAuthsAsync();
+            return Ok(auths);
         }
 
         // GET: api/UserSocialAuth/5
         [HttpGet("{id}")]
         public async Task<ActionResult<UserSocialAuth>> GetUserSocialAuth(int id)
         {
-            var auth = await _context.UserSocialAuths
-                .Include(ua => ua.User)
-                .FirstOrDefaultAsync(ua => ua.SocialAuthId == id);
-
+            var auth = await _userSocialAuthService.GetUserSocialAuthByIdAsync(id);
             if (auth == null)
-            {
                 return NotFound();
-            }
-            return auth;
+
+            return Ok(auth);
         }
 
         // POST: api/UserSocialAuth
         [HttpPost]
         public async Task<ActionResult<UserSocialAuth>> CreateUserSocialAuth(UserSocialAuth auth)
         {
-            _context.UserSocialAuths.Add(auth);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction(nameof(GetUserSocialAuth), new { id = auth.SocialAuthId }, auth);
+            var createdAuth = await _userSocialAuthService.CreateUserSocialAuthAsync(auth);
+            return CreatedAtAction(nameof(GetUserSocialAuth), new { id = createdAuth.SocialAuthId }, createdAuth);
         }
 
         // PUT: api/UserSocialAuth/5
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateUserSocialAuth(int id, UserSocialAuth auth)
         {
-            if (id != auth.SocialAuthId)
-            {
+            var success = await _userSocialAuthService.UpdateUserSocialAuthAsync(id, auth);
+            if (!success)
                 return BadRequest();
-            }
-
-            _context.Entry(auth).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!UserSocialAuthExists(id))
-                {
-                    return NotFound();
-                }
-                throw;
-            }
 
             return NoContent();
         }
@@ -85,21 +63,11 @@ namespace WebApplication2.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteUserSocialAuth(int id)
         {
-            var auth = await _context.UserSocialAuths.FindAsync(id);
-            if (auth == null)
-            {
+            var success = await _userSocialAuthService.DeleteUserSocialAuthAsync(id);
+            if (!success)
                 return NotFound();
-            }
-
-            _context.UserSocialAuths.Remove(auth);
-            await _context.SaveChangesAsync();
 
             return NoContent();
-        }
-
-        private bool UserSocialAuthExists(int id)
-        {
-            return _context.UserSocialAuths.Any(e => e.SocialAuthId == id);
         }
     }
 }

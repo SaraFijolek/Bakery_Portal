@@ -109,9 +109,9 @@
     "ReturnTypes": []
   },
   {
-    "ContainingType": "WebApplication2.Controllers.AdminAuditLogsControllers",
+    "ContainingType": "WebApplication2.Controllers.AdminAuditLogsController",
     "Method": "GetAdminAuditLogs",
-    "RelativePath": "api/AdminAuditLogsControllers",
+    "RelativePath": "api/AdminAuditLogs",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
@@ -129,9 +129,9 @@
     ]
   },
   {
-    "ContainingType": "WebApplication2.Controllers.AdminAuditLogsControllers",
+    "ContainingType": "WebApplication2.Controllers.AdminAuditLogsController",
     "Method": "CreateAdminAuditLog",
-    "RelativePath": "api/AdminAuditLogsControllers",
+    "RelativePath": "api/AdminAuditLogs",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
@@ -155,9 +155,9 @@
     ]
   },
   {
-    "ContainingType": "WebApplication2.Controllers.AdminAuditLogsControllers",
+    "ContainingType": "WebApplication2.Controllers.AdminAuditLogsController",
     "Method": "GetAdminAuditLog",
-    "RelativePath": "api/AdminAuditLogsControllers/{id}",
+    "RelativePath": "api/AdminAuditLogs/{id}",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
@@ -181,9 +181,9 @@
     ]
   },
   {
-    "ContainingType": "WebApplication2.Controllers.AdminAuditLogsControllers",
+    "ContainingType": "WebApplication2.Controllers.AdminAuditLogsController",
     "Method": "UpdateAdminAuditLog",
-    "RelativePath": "api/AdminAuditLogsControllers/{id}",
+    "RelativePath": "api/AdminAuditLogs/{id}",
     "HttpMethod": "PUT",
     "IsController": true,
     "Order": 0,
@@ -202,9 +202,9 @@
     "ReturnTypes": []
   },
   {
-    "ContainingType": "WebApplication2.Controllers.AdminAuditLogsControllers",
+    "ContainingType": "WebApplication2.Controllers.AdminAuditLogsController",
     "Method": "DeleteAdminAuditLog",
-    "RelativePath": "api/AdminAuditLogsControllers/{id}",
+    "RelativePath": "api/AdminAuditLogs/{id}",
     "HttpMethod": "DELETE",
     "IsController": true,
     "Order": 0,
@@ -545,9 +545,9 @@
     "ReturnTypes": []
   },
   {
-    "ContainingType": "WebApplication2.Controllers.AdminSessionsController",
+    "ContainingType": "WebApplication2.Controllers.AdminsSessionsController",
     "Method": "GetAdminSessions",
-    "RelativePath": "api/AdminSessions",
+    "RelativePath": "api/AdminsSessions",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
@@ -565,9 +565,9 @@
     ]
   },
   {
-    "ContainingType": "WebApplication2.Controllers.AdminSessionsController",
+    "ContainingType": "WebApplication2.Controllers.AdminsSessionsController",
     "Method": "CreateAdminSession",
-    "RelativePath": "api/AdminSessions",
+    "RelativePath": "api/AdminsSessions",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
@@ -591,9 +591,9 @@
     ]
   },
   {
-    "ContainingType": "WebApplication2.Controllers.AdminSessionsController",
+    "ContainingType": "WebApplication2.Controllers.AdminsSessionsController",
     "Method": "GetAdminSession",
-    "RelativePath": "api/AdminSessions/{id}",
+    "RelativePath": "api/AdminsSessions/{id}",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
@@ -617,9 +617,9 @@
     ]
   },
   {
-    "ContainingType": "WebApplication2.Controllers.AdminSessionsController",
+    "ContainingType": "WebApplication2.Controllers.AdminsSessionsController",
     "Method": "UpdateAdminSession",
-    "RelativePath": "api/AdminSessions/{id}",
+    "RelativePath": "api/AdminsSessions/{id}",
     "HttpMethod": "PUT",
     "IsController": true,
     "Order": 0,
@@ -638,9 +638,9 @@
     "ReturnTypes": []
   },
   {
-    "ContainingType": "WebApplication2.Controllers.AdminSessionsController",
+    "ContainingType": "WebApplication2.Controllers.AdminsSessionsController",
     "Method": "DeleteAdminSession",
-    "RelativePath": "api/AdminSessions/{id}",
+    "RelativePath": "api/AdminsSessions/{id}",
     "HttpMethod": "DELETE",
     "IsController": true,
     "Order": 0,
@@ -872,7 +872,7 @@
     "ReturnTypes": []
   },
   {
-    "ContainingType": "WebApplication2.Controllers.CategoriesController",
+    "ContainingType": "WebApplication2.Controllers.WebApplication2.Controllers.CategoriesController",
     "Method": "GetCategories",
     "RelativePath": "api/Categories",
     "HttpMethod": "GET",
@@ -892,7 +892,7 @@
     ]
   },
   {
-    "ContainingType": "WebApplication2.Controllers.CategoriesController",
+    "ContainingType": "WebApplication2.Controllers.WebApplication2.Controllers.CategoriesController",
     "Method": "CreateCategory",
     "RelativePath": "api/Categories",
     "HttpMethod": "POST",
@@ -918,7 +918,7 @@
     ]
   },
   {
-    "ContainingType": "WebApplication2.Controllers.CategoriesController",
+    "ContainingType": "WebApplication2.Controllers.WebApplication2.Controllers.CategoriesController",
     "Method": "GetCategory",
     "RelativePath": "api/Categories/{id}",
     "HttpMethod": "GET",
@@ -944,7 +944,7 @@
     ]
   },
   {
-    "ContainingType": "WebApplication2.Controllers.CategoriesController",
+    "ContainingType": "WebApplication2.Controllers.WebApplication2.Controllers.CategoriesController",
     "Method": "UpdateCategory",
     "RelativePath": "api/Categories/{id}",
     "HttpMethod": "PUT",
@@ -965,7 +965,7 @@
     "ReturnTypes": []
   },
   {
-    "ContainingType": "WebApplication2.Controllers.CategoriesController",
+    "ContainingType": "WebApplication2.Controllers.WebApplication2.Controllers.CategoriesController",
     "Method": "DeleteCategory",
     "RelativePath": "api/Categories/{id}",
     "HttpMethod": "DELETE",
@@ -1753,7 +1753,7 @@
     "Parameters": [],
     "ReturnTypes": [
       {
-        "Type": "System.Collections.Generic.IEnumerable\u00601[[WebApplication2.Properties.Models.User, WebApplication2, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "Type": "System.Collections.Generic.List\u00601[[WebApplication2.Properties.Models.User, WebApplication2, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
         "MediaTypes": [
           "text/plain",
           "application/json",

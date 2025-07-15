@@ -190,10 +190,10 @@
         }
       }
     },
-    "/api/AdminAuditLogsControllers": {
+    "/api/AdminAuditLogs": {
       "get": {
         "tags": [
-          "AdminAuditLogsControllers"
+          "AdminAuditLogs"
         ],
         "responses": {
           "200": {
@@ -229,7 +229,7 @@
       },
       "post": {
         "tags": [
-          "AdminAuditLogsControllers"
+          "AdminAuditLogs"
         ],
         "requestBody": {
           "content": {
@@ -274,10 +274,10 @@
         }
       }
     },
-    "/api/AdminAuditLogsControllers/{id}": {
+    "/api/AdminAuditLogs/{id}": {
       "get": {
         "tags": [
-          "AdminAuditLogsControllers"
+          "AdminAuditLogs"
         ],
         "parameters": [
           {
@@ -315,7 +315,7 @@
       },
       "put": {
         "tags": [
-          "AdminAuditLogsControllers"
+          "AdminAuditLogs"
         ],
         "parameters": [
           {
@@ -355,7 +355,7 @@
       },
       "delete": {
         "tags": [
-          "AdminAuditLogsControllers"
+          "AdminAuditLogs"
         ],
         "parameters": [
           {
@@ -930,10 +930,10 @@
         }
       }
     },
-    "/api/AdminSessions": {
+    "/api/AdminsSessions": {
       "get": {
         "tags": [
-          "AdminSessions"
+          "AdminsSessions"
         ],
         "responses": {
           "200": {
@@ -969,7 +969,7 @@
       },
       "post": {
         "tags": [
-          "AdminSessions"
+          "AdminsSessions"
         ],
         "requestBody": {
           "content": {
@@ -1014,10 +1014,10 @@
         }
       }
     },
-    "/api/AdminSessions/{id}": {
+    "/api/AdminsSessions/{id}": {
       "get": {
         "tags": [
-          "AdminSessions"
+          "AdminsSessions"
         ],
         "parameters": [
           {
@@ -1055,7 +1055,7 @@
       },
       "put": {
         "tags": [
-          "AdminSessions"
+          "AdminsSessions"
         ],
         "parameters": [
           {
@@ -1095,7 +1095,7 @@
       },
       "delete": {
         "tags": [
-          "AdminSessions"
+          "AdminsSessions"
         ],
         "parameters": [
           {
