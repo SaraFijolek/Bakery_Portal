@@ -1,13 +1,10 @@
-﻿// Properties/Services/AdMadiaService.cs
 using Microsoft.EntityFrameworkCore;
 using WebApplication2.DTO;
-using WebApplication2.Helpers;
 using WebApplication2.Properties.Data;
 using WebApplication2.Properties.Models;
 using WebApplication2.Properties.Services.Interfaces;
 
-namespace WebApplication2.Properties.Services
-{
+
     public class AdMadiaService : IAdMadiaService
     {
         private readonly AppDbContext _context;
@@ -23,8 +20,16 @@ namespace WebApplication2.Properties.Services
                 .Include(m => m.Ad)
                 .ToListAsync();
 
-            return adMediaEntities.ToAdMediaResponseDtos();
+            // Manualne mapowanie zamiast extension method
+            return adMediaEntities.Select(entity => new AdMediaResponseDto
+            {
+                MediaId = entity.MediaId,
+                AdId = entity.AdId,
+                MediaType = entity.MediaType,
+            }
+            ).ToList();
         }
+
 
         public async Task<AdMediaResponseDto?> GetAdMediaByIdAsync(int id)
         {
@@ -32,12 +37,32 @@ namespace WebApplication2.Properties.Services
                 .Include(m => m.Ad)
                 .FirstOrDefaultAsync(m => m.MediaId == id);
 
-            return adMediaEntity?.ToAdMediaResponseDto();
+            if (adMediaEntity == null)
+                return null;
+
+            // Manualne mapowanie
+            return new AdMediaResponseDto
+            {
+                MediaId = adMediaEntity.MediaId,
+                AdId = adMediaEntity.AdId,
+                MediaType = adMediaEntity.MediaType,
+            };
         }
+                
+                // Dodaj inne właściwości zgodnie z twoją strukturą DTO
+               
+          
 
         public async Task<AdMediaResponseDto> CreateAdMediaAsync(CreateAdMediaDto createAdMediaDto)
         {
-            var adMediaEntity = createAdMediaDto.ToEntity();
+            // Manualne mapowanie z DTO na Entity
+            var adMediaEntity = new Admedia
+            {
+                AdId = createAdMediaDto.AdId,
+                MediaType = createAdMediaDto.MediaType,
+
+                // Dodaj inne właściwości zgodnie z twoją strukturą
+            };
 
             _context.Admedias.Add(adMediaEntity);
             await _context.SaveChangesAsync();
@@ -47,8 +72,16 @@ namespace WebApplication2.Properties.Services
                 .Include(m => m.Ad)
                 .FirstOrDefaultAsync(m => m.MediaId == adMediaEntity.MediaId);
 
-            return createdAdMedia!.ToAdMediaResponseDto();
+            // Manualne mapowanie z Entity na DTO
+            return new AdMediaResponseDto
+            {
+                MediaId = createdAdMedia!.MediaId,
+                AdId = createdAdMedia.AdId,
+                MediaType = createdAdMedia.MediaType,
+            };
         }
+               
+        
 
         public async Task<bool> UpdateAdMediaAsync(int id, UpdateAdMediaDto updateAdMediaDto)
         {
@@ -63,7 +96,12 @@ namespace WebApplication2.Properties.Services
                 return false;
             }
 
-            updateAdMediaDto.MapToEntity(existingAdMedia);
+            // Manualne mapowanie z DTO na Entity
+            existingAdMedia.AdId = updateAdMediaDto.AdId;
+            existingAdMedia.MediaType = updateAdMediaDto.MediaType;
+           
+            // Dodaj inne właściwości zgodnie z twoją strukturą
+
             _context.Entry(existingAdMedia).State = EntityState.Modified;
 
             try
@@ -99,4 +137,3 @@ namespace WebApplication2.Properties.Services
             return await _context.Admedias.AnyAsync(e => e.MediaId == id);
         }
     }
-}

@@ -24,7 +24,7 @@ namespace WebApplication2.Controllers
 
         // GET: api/Admins
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<AdminsDto>>> GetAdmins()
+        public async Task<ActionResult<IEnumerable<AdminDto>>> GetAdmins()
         {
             var admins = await _adminsService.GetAllAdminsAsync();
             return Ok(admins);
@@ -32,7 +32,7 @@ namespace WebApplication2.Controllers
 
         // GET: api/Admins/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<AdminsDto>> GetAdmin(int id)
+        public async Task<ActionResult<AdminDto>> GetAdmin(int id)
         {
             var admin = await _adminsService.GetAdminByIdAsync(id);
             if (admin == null)
@@ -44,7 +44,7 @@ namespace WebApplication2.Controllers
 
         // POST: api/Admins
         [HttpPost]
-        public async Task<ActionResult<AdminsDto>> CreateAdmin(CreateAdminDto createDto)
+        public async Task<ActionResult<AdminDto>> CreateAdmin(CreateAdminDto createDto)
         {
             var createdAdmin = await _adminsService.CreateAdminAsync(createDto);
             return CreatedAtAction(nameof(GetAdmin), new { id = createdAdmin.AdminId }, createdAdmin);

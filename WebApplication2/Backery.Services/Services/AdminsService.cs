@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using WebApplication2.Properties.Data;
 using WebApplication2.Properties.Models;
 using WebApplication2.Properties.Services.Interfaces;
@@ -15,7 +15,7 @@ namespace WebApplication2.Properties.Services
             _context = context;
         }
 
-        public async Task<IEnumerable<AdminsDto>> GetAllAdminsAsync()
+        public async Task<IEnumerable<AdminDto>> GetAllAdminsAsync()
         {
             var admins = await _context.Admins
                 .Include(a => a.AdminSessions)
@@ -27,7 +27,7 @@ namespace WebApplication2.Properties.Services
             return admins.Select(a => MapToAdminsDto(a));
         }
 
-        public async Task<AdminsDto?> GetAdminByIdAsync(int id)
+        public async Task<AdminDto?> GetAdminByIdAsync(int id)
         {
             var admin = await _context.Admins
                 .Include(a => a.AdminSessions)
@@ -39,7 +39,7 @@ namespace WebApplication2.Properties.Services
             return admin == null ? null : MapToAdminsDto(admin);
         }
 
-        public async Task<AdminsDto> CreateAdminAsync(CreateAdminDto createDto)
+        public async Task<AdminDto> CreateAdminAsync(CreateAdminDto createDto)
         {
             var admin = new Admin
             {
@@ -137,13 +137,13 @@ namespace WebApplication2.Properties.Services
             };
         }
 
-        public async Task<IEnumerable<AdminsDto>> GetActiveAdminsAsync()
+        public async Task<IEnumerable<AdminDto>> GetActiveAdminsAsync()
         {
             var admins = await _context.Admins.Where(a => a.IsActive).ToListAsync();
             return admins.Select(a => MapToAdminsDto(a));
         }
 
-        public async Task<IEnumerable<AdminsDto>> GetAdminsByRoleAsync(string role)
+        public async Task<IEnumerable<AdminDto>> GetAdminsByRoleAsync(string role)
         {
             var admins = await _context.Admins.Where(a => a.Role == role).ToListAsync();
             return admins.Select(a => MapToAdminsDto(a));
@@ -192,9 +192,9 @@ namespace WebApplication2.Properties.Services
 
 
         
-        private AdminsDto MapToAdminsDto(Admin admin)
+        private AdminDto MapToAdminsDto(Admin admin)
         {
-            return new AdminsDto
+            return new AdminDto
             {
                 AdminId = admin.AdminId,
                 Email = admin.Email,
