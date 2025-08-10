@@ -26,20 +26,34 @@ namespace WebApplication2.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<AdMediaResponseDto>>> GetAdMedia()
         {
-            var adMedia = await _adMadiaService.GetAllAdMediaAsync();
-            return Ok(adMedia);
+            var result = await _adMadiaService.GetAllAdMediaAsync();
+
+            if (result.Success)
+                return StatusCode(result.StatusCode, result.Data);
+
+            return StatusCode(result.StatusCode, new
+            {
+                success = false,
+                message = result.Message,
+                errors = result.Errors
+            });
         }
 
         // GET: api/AdMedia/5
         [HttpGet("{id}")]
         public async Task<ActionResult<AdMediaResponseDto>> GetAdMedia(int id)
         {
-            var adMedia = await _adMadiaService.GetAdMediaByIdAsync(id);
-            if (adMedia == null)
+            var result = await _adMadiaService.GetAdMediaByIdAsync(id);
+
+            if (result.Success)
+                return StatusCode(result.StatusCode, result.Data);
+
+            return StatusCode(result.StatusCode, new
             {
-                return NotFound();
-            }
-            return Ok(adMedia);
+                success = false,
+                message = result.Message,
+                errors = result.Errors
+            });
         }
 
         // POST: api/AdMedia
@@ -48,11 +62,25 @@ namespace WebApplication2.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest(ModelState);
+                return BadRequest(new
+                {
+                    success = false,
+                    message = "Invalid model state",
+                    errors = ModelState.Values.SelectMany(v => v.Errors.Select(e => e.ErrorMessage)).ToList()
+                });
             }
 
-            var createdAdMedia = await _adMadiaService.CreateAdMediaAsync(createAdMediaDto);
-            return CreatedAtAction(nameof(GetAdMedia), new { id = createdAdMedia.MediaId }, createdAdMedia);
+            var result = await _adMadiaService.CreateAdMediaAsync(createAdMediaDto);
+
+            if (result.Success)
+                return StatusCode(result.StatusCode, result.Data);
+
+            return StatusCode(result.StatusCode, new
+            {
+                success = false,
+                message = result.Message,
+                errors = result.Errors
+            });
         }
 
         // PUT: api/AdMedia/5
@@ -61,21 +89,35 @@ namespace WebApplication2.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest(ModelState);
+                return BadRequest(new
+                {
+                    success = false,
+                    message = "Invalid model state",
+                    errors = ModelState.Values.SelectMany(v => v.Errors.Select(e => e.ErrorMessage)).ToList()
+                });
             }
 
             if (id != updateAdMediaDto.MediaId)
             {
-                return BadRequest("ID w URL nie zgadza się z ID w obiekcie");
+                return BadRequest(new
+                {
+                    success = false,
+                    message = "ID w URL nie zgadza się z ID w obiekcie",
+                    errors = new List<string> { "ID mismatch between URL and request body" }
+                });
             }
 
             var result = await _adMadiaService.UpdateAdMediaAsync(id, updateAdMediaDto);
-            if (!result)
-            {
-                return NotFound();
-            }
 
-            return NoContent();
+            if (result.Success)
+                return StatusCode(result.StatusCode, result.Data);
+
+            return StatusCode(result.StatusCode, new
+            {
+                success = false,
+                message = result.Message,
+                errors = result.Errors
+            });
         }
 
         // DELETE: api/AdMedia/5
@@ -83,12 +125,16 @@ namespace WebApplication2.Controllers
         public async Task<IActionResult> DeleteAdMedia(int id)
         {
             var result = await _adMadiaService.DeleteAdMediaAsync(id);
-            if (!result)
-            {
-                return NotFound();
-            }
 
-            return NoContent();
+            if (result.Success)
+                return StatusCode(result.StatusCode, result.Data);
+
+            return StatusCode(result.StatusCode, new
+            {
+                success = false,
+                message = result.Message,
+                errors = result.Errors
+            });
         }
     }
 }

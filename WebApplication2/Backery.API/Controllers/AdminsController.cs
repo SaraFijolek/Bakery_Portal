@@ -8,7 +8,6 @@ using WebApplication2.Properties.Models;
 using WebApplication2.Properties.Services.Interfaces;
 using WebApplication2.DTO;
 
-
 namespace WebApplication2.Controllers
 {
     [ApiController]
@@ -24,30 +23,53 @@ namespace WebApplication2.Controllers
 
         // GET: api/Admins
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<AdminDto>>> GetAdmins()
+        public async Task<IActionResult> GetAdmins()
         {
-            var admins = await _adminsService.GetAllAdminsAsync();
-            return Ok(admins);
+            var result = await _adminsService.GetAllAdminsAsync();
+
+            if (result.Success)
+                return StatusCode(result.StatusCode, result.Data);
+
+            return StatusCode(result.StatusCode, new
+            {
+                success = false,
+                message = result.Message,
+                errors = result.Errors
+            });
         }
 
         // GET: api/Admins/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<AdminDto>> GetAdmin(int id)
+        public async Task<IActionResult> GetAdmin(int id)
         {
-            var admin = await _adminsService.GetAdminByIdAsync(id);
-            if (admin == null)
+            var result = await _adminsService.GetAdminByIdAsync(id);
+
+            if (result.Success)
+                return StatusCode(result.StatusCode, result.Data);
+
+            return StatusCode(result.StatusCode, new
             {
-                return NotFound();
-            }
-            return Ok(admin);
+                success = false,
+                message = result.Message,
+                errors = result.Errors
+            });
         }
 
         // POST: api/Admins
         [HttpPost]
-        public async Task<ActionResult<AdminDto>> CreateAdmin(CreateAdminDto createDto)
+        public async Task<IActionResult> CreateAdmin(CreateAdminDto createDto)
         {
-            var createdAdmin = await _adminsService.CreateAdminAsync(createDto);
-            return CreatedAtAction(nameof(GetAdmin), new { id = createdAdmin.AdminId }, createdAdmin);
+            var result = await _adminsService.CreateAdminAsync(createDto);
+
+            if (result.Success)
+                return StatusCode(result.StatusCode, result.Data);
+
+            return StatusCode(result.StatusCode, new
+            {
+                success = false,
+                message = result.Message,
+                errors = result.Errors
+            });
         }
 
         // PUT: api/Admins/5
@@ -55,11 +77,16 @@ namespace WebApplication2.Controllers
         public async Task<IActionResult> UpdateAdmin(int id, UpdateAdminDto updateDto)
         {
             var result = await _adminsService.UpdateAdminAsync(id, updateDto);
-            if (!result)
+
+            if (result.Success)
+                return StatusCode(result.StatusCode, result.Data);
+
+            return StatusCode(result.StatusCode, new
             {
-                return BadRequest();
-            }
-            return NoContent();
+                success = false,
+                message = result.Message,
+                errors = result.Errors
+            });
         }
 
         // DELETE: api/Admins/5
@@ -67,11 +94,16 @@ namespace WebApplication2.Controllers
         public async Task<IActionResult> DeleteAdmin(int id)
         {
             var result = await _adminsService.DeleteAdminAsync(id);
-            if (!result)
+
+            if (result.Success)
+                return StatusCode(result.StatusCode, result.Data);
+
+            return StatusCode(result.StatusCode, new
             {
-                return NotFound();
-            }
-            return NoContent();
+                success = false,
+                message = result.Message,
+                errors = result.Errors
+            });
         }
     }
 }

@@ -9,7 +9,6 @@ using WebApplication2.Properties.DTOs;
 using WebApplication2.Properties.Models;
 using WebApplication2.Properties.Services.Interfaces;
 
-
 namespace WebApplication2.Controllers
 {
     [ApiController]
@@ -27,18 +26,32 @@ namespace WebApplication2.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<NotificationDto>>> GetNotifications()
         {
-            var notifications = await _notificationService.GetNotificationsAsync();
-            return Ok(notifications);
+            var result = await _notificationService.GetNotificationsAsync();
+            if (result.Success)
+                return StatusCode(result.StatusCode, result.Data);
+
+            return StatusCode(result.StatusCode, new
+            {
+                success = false,
+                message = result.Message,
+                errors = result.Errors
+            });
         }
 
         // GET: api/Notifications/5
         [HttpGet("{id}")]
         public async Task<ActionResult<NotificationDto>> GetNotification(int id)
         {
-            var notification = await _notificationService.GetNotificationByIdAsync(id);
-            if (notification == null)
-                return NotFound();
-            return Ok(notification);
+            var result = await _notificationService.GetNotificationByIdAsync(id);
+            if (result.Success)
+                return StatusCode(result.StatusCode, result.Data);
+
+            return StatusCode(result.StatusCode, new
+            {
+                success = false,
+                message = result.Message,
+                errors = result.Errors
+            });
         }
 
         // POST: api/Notifications
@@ -46,10 +59,25 @@ namespace WebApplication2.Controllers
         public async Task<ActionResult<NotificationDto>> CreateNotification(CreateNotificationDto createNotificationDto)
         {
             if (!ModelState.IsValid)
-                return BadRequest(ModelState);
+            {
+                return BadRequest(new
+                {
+                    success = false,
+                    message = "Model validation failed",
+                    errors = ModelState.SelectMany(x => x.Value.Errors.Select(e => e.ErrorMessage)).ToList()
+                });
+            }
 
-            var createdNotification = await _notificationService.CreateNotificationAsync(createNotificationDto);
-            return CreatedAtAction(nameof(GetNotification), new { id = createdNotification.NotificationId }, createdNotification);
+            var result = await _notificationService.CreateNotificationAsync(createNotificationDto);
+            if (result.Success)
+                return StatusCode(result.StatusCode, result.Data);
+
+            return StatusCode(result.StatusCode, new
+            {
+                success = false,
+                message = result.Message,
+                errors = result.Errors
+            });
         }
 
         // PUT: api/Notifications/5
@@ -57,31 +85,41 @@ namespace WebApplication2.Controllers
         public async Task<IActionResult> UpdateNotification(int id, UpdateNotificationDto updateNotificationDto)
         {
             if (!ModelState.IsValid)
-                return BadRequest(ModelState);
+            {
+                return BadRequest(new
+                {
+                    success = false,
+                    message = "Model validation failed",
+                    errors = ModelState.SelectMany(x => x.Value.Errors.Select(e => e.ErrorMessage)).ToList()
+                });
+            }
 
-            try
+            var result = await _notificationService.UpdateNotificationAsync(id, updateNotificationDto);
+            if (result.Success)
+                return StatusCode(result.StatusCode, result.Data);
+
+            return StatusCode(result.StatusCode, new
             {
-                var updatedNotification = await _notificationService.UpdateNotificationAsync(id, updateNotificationDto);
-                return Ok(updatedNotification);
-            }
-            catch (ArgumentException)
-            {
-                return BadRequest();
-            }
-            catch (KeyNotFoundException)
-            {
-                return NotFound();
-            }
+                success = false,
+                message = result.Message,
+                errors = result.Errors
+            });
         }
 
         // DELETE: api/Notifications/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteNotification(int id)
         {
-            var deleted = await _notificationService.DeleteNotificationAsync(id);
-            if (!deleted)
-                return NotFound();
-            return NoContent();
+            var result = await _notificationService.DeleteNotificationAsync(id);
+            if (result.Success)
+                return StatusCode(result.StatusCode, result.Data);
+
+            return StatusCode(result.StatusCode, new
+            {
+                success = false,
+                message = result.Message,
+                errors = result.Errors
+            });
         }
     }
 }

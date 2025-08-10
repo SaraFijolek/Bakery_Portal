@@ -6,11 +6,11 @@ namespace WebApplication2.Properties.Services.Interfaces
     public interface IAdminPermissionsService
     {
 
-        Task<IEnumerable<AdminPermissionListItemDto>> GetAllAdminPermissionsDtoAsync();
-        Task<AdminPermissionResponseDto?> GetAdminPermissionByIdDtoAsync(int id);
-        Task<AdminPermissionResponseDto> CreateAdminPermissionAsync(CreateAdminPermissionDto createDto);
-        Task<bool> UpdateAdminPermissionAsync(int id, UpdateAdminPermissionDto updateDto);
-        Task<bool> DeleteAdminPermissionAsync(int id);
+        Task<ServiceResult<IEnumerable<AdminPermissionListItemDto>>> GetAllAdminPermissionsDtoAsync();
+        Task<ServiceResult<AdminPermissionResponseDto>> GetAdminPermissionByIdDtoAsync(int id);
+        Task<ServiceResult<AdminPermissionResponseDto>> CreateAdminPermissionAsync(CreateAdminPermissionDto createDto);
+        Task<ServiceResult<object>> UpdateAdminPermissionAsync(int id, UpdateAdminPermissionDto updateDto);
+        Task<ServiceResult<object>> DeleteAdminPermissionAsync(int id);
         Task<bool> AdminPermissionExistsAsync(int id);
     }
 }

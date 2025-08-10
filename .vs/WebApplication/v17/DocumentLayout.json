@@ -3,36 +3,20 @@
   "WorkspaceRootPath": "C:\\Users\\saras\\OneDrive\\Dokumenty\\programowanie-projekty\\C#\\WebApplication2\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{83D25DBD-1DEC-441A-B080-7DD17F9137D1}|WebApplication2\\WebApplication2.csproj|c:\\users\\saras\\onedrive\\dokumenty\\programowanie-projekty\\c#\\webapplication2\\webapplication2\\backery.api\\controllers\\usercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{83D25DBD-1DEC-441A-B080-7DD17F9137D1}|WebApplication2\\WebApplication2.csproj|solutionrelative:webapplication2\\backery.api\\controllers\\usercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{83D25DBD-1DEC-441A-B080-7DD17F9137D1}|WebApplication2\\WebApplication2.csproj|c:\\users\\saras\\onedrive\\dokumenty\\programowanie-projekty\\c#\\webapplication2\\webapplication2\\serviceextension.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{83D25DBD-1DEC-441A-B080-7DD17F9137D1}|WebApplication2\\WebApplication2.csproj|solutionrelative:webapplication2\\serviceextension.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{83D25DBD-1DEC-441A-B080-7DD17F9137D1}|WebApplication2\\WebApplication2.csproj|c:\\users\\saras\\onedrive\\dokumenty\\programowanie-projekty\\c#\\webapplication2\\webapplication2\\properties\\launchsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
-      "RelativeMoniker": "D:0:0:{83D25DBD-1DEC-441A-B080-7DD17F9137D1}|WebApplication2\\WebApplication2.csproj|solutionrelative:webapplication2\\properties\\launchsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+      "AbsoluteMoniker": "D:0:0:{83D25DBD-1DEC-441A-B080-7DD17F9137D1}|WebApplication2\\WebApplication2.csproj|c:\\users\\saras\\onedrive\\dokumenty\\programowanie-projekty\\c#\\webapplication2\\webapplication2\\backery.api\\controllers\\admediacontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{83D25DBD-1DEC-441A-B080-7DD17F9137D1}|WebApplication2\\WebApplication2.csproj|solutionrelative:webapplication2\\backery.api\\controllers\\admediacontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{83D25DBD-1DEC-441A-B080-7DD17F9137D1}|WebApplication2\\WebApplication2.csproj|c:\\users\\saras\\onedrive\\dokumenty\\programowanie-projekty\\c#\\webapplication2\\webapplication2\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
-      "RelativeMoniker": "D:0:0:{83D25DBD-1DEC-441A-B080-7DD17F9137D1}|WebApplication2\\WebApplication2.csproj|solutionrelative:webapplication2\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+      "AbsoluteMoniker": "D:0:0:{83D25DBD-1DEC-441A-B080-7DD17F9137D1}|WebApplication2\\WebApplication2.csproj|c:\\users\\saras\\onedrive\\dokumenty\\programowanie-projekty\\c#\\webapplication2\\webapplication2\\backery.services\\services\\interfaces\\iadmadiaservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{83D25DBD-1DEC-441A-B080-7DD17F9137D1}|WebApplication2\\WebApplication2.csproj|solutionrelative:webapplication2\\backery.services\\services\\interfaces\\iadmadiaservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{83D25DBD-1DEC-441A-B080-7DD17F9137D1}|WebApplication2\\WebApplication2.csproj|c:\\users\\saras\\onedrive\\dokumenty\\programowanie-projekty\\c#\\webapplication2\\webapplication2\\backery.services\\services\\adminsservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{83D25DBD-1DEC-441A-B080-7DD17F9137D1}|WebApplication2\\WebApplication2.csproj|solutionrelative:webapplication2\\backery.services\\services\\adminsservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{83D25DBD-1DEC-441A-B080-7DD17F9137D1}|WebApplication2\\WebApplication2.csproj|c:\\users\\saras\\onedrive\\dokumenty\\programowanie-projekty\\c#\\webapplication2\\webapplication2\\backery.services\\services\\interfaces\\iadminsservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{83D25DBD-1DEC-441A-B080-7DD17F9137D1}|WebApplication2\\WebApplication2.csproj|solutionrelative:webapplication2\\backery.services\\services\\interfaces\\iadminsservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{83D25DBD-1DEC-441A-B080-7DD17F9137D1}|WebApplication2\\WebApplication2.csproj|c:\\users\\saras\\onedrive\\dokumenty\\programowanie-projekty\\c#\\webapplication2\\webapplication2\\backery.api\\controllers\\adminscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{83D25DBD-1DEC-441A-B080-7DD17F9137D1}|WebApplication2\\WebApplication2.csproj|solutionrelative:webapplication2\\backery.api\\controllers\\adminscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{83D25DBD-1DEC-441A-B080-7DD17F9137D1}|WebApplication2\\WebApplication2.csproj|c:\\users\\saras\\onedrive\\dokumenty\\programowanie-projekty\\c#\\webapplication2\\webapplication2\\backery.services\\services\\userservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{83D25DBD-1DEC-441A-B080-7DD17F9137D1}|WebApplication2\\WebApplication2.csproj|solutionrelative:webapplication2\\backery.services\\services\\userservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{83D25DBD-1DEC-441A-B080-7DD17F9137D1}|WebApplication2\\WebApplication2.csproj|c:\\users\\saras\\onedrive\\dokumenty\\programowanie-projekty\\c#\\webapplication2\\webapplication2\\backery.services\\services\\interfaces\\iuserservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{83D25DBD-1DEC-441A-B080-7DD17F9137D1}|WebApplication2\\WebApplication2.csproj|solutionrelative:webapplication2\\backery.services\\services\\interfaces\\iuserservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{83D25DBD-1DEC-441A-B080-7DD17F9137D1}|WebApplication2\\WebApplication2.csproj|c:\\users\\saras\\onedrive\\dokumenty\\programowanie-projekty\\c#\\webapplication2\\webapplication2\\backery.services\\services\\admadiaservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{83D25DBD-1DEC-441A-B080-7DD17F9137D1}|WebApplication2\\WebApplication2.csproj|solutionrelative:webapplication2\\backery.services\\services\\admadiaservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -42,104 +26,59 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 3,
+          "SelectedChildIndex": 0,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "launchSettings.json",
-              "DocumentMoniker": "C:\\Users\\saras\\OneDrive\\Dokumenty\\programowanie-projekty\\C#\\WebApplication2\\WebApplication2\\Properties\\launchSettings.json",
-              "RelativeDocumentMoniker": "WebApplication2\\Properties\\launchSettings.json",
-              "ToolTip": "C:\\Users\\saras\\OneDrive\\Dokumenty\\programowanie-projekty\\C#\\WebApplication2\\WebApplication2\\Properties\\launchSettings.json",
-              "RelativeToolTip": "WebApplication2\\Properties\\launchSettings.json",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAACgAAAABAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
-              "WhenOpened": "2025-08-04T11:19:26.181Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "appsettings.json",
-              "DocumentMoniker": "C:\\Users\\saras\\OneDrive\\Dokumenty\\programowanie-projekty\\C#\\WebApplication2\\WebApplication2\\appsettings.json",
-              "RelativeDocumentMoniker": "WebApplication2\\appsettings.json",
-              "ToolTip": "C:\\Users\\saras\\OneDrive\\Dokumenty\\programowanie-projekty\\C#\\WebApplication2\\WebApplication2\\appsettings.json",
-              "RelativeToolTip": "WebApplication2\\appsettings.json",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
-              "WhenOpened": "2025-08-04T11:18:56.25Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "AdminsService.cs",
-              "DocumentMoniker": "C:\\Users\\saras\\OneDrive\\Dokumenty\\programowanie-projekty\\C#\\WebApplication2\\WebApplication2\\Backery.Services\\Services\\AdminsService.cs",
-              "RelativeDocumentMoniker": "WebApplication2\\Backery.Services\\Services\\AdminsService.cs",
-              "ToolTip": "C:\\Users\\saras\\OneDrive\\Dokumenty\\programowanie-projekty\\C#\\WebApplication2\\WebApplication2\\Backery.Services\\Services\\AdminsService.cs",
-              "RelativeToolTip": "WebApplication2\\Backery.Services\\Services\\AdminsService.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAJwAAAAMAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-04T10:09:57.318Z"
-            },
-            {
-              "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "UserController.cs",
-              "DocumentMoniker": "C:\\Users\\saras\\OneDrive\\Dokumenty\\programowanie-projekty\\C#\\WebApplication2\\WebApplication2\\Backery.API\\Controllers\\UserController.cs",
-              "RelativeDocumentMoniker": "WebApplication2\\Backery.API\\Controllers\\UserController.cs",
-              "ToolTip": "C:\\Users\\saras\\OneDrive\\Dokumenty\\programowanie-projekty\\C#\\WebApplication2\\WebApplication2\\Backery.API\\Controllers\\UserController.cs",
-              "RelativeToolTip": "WebApplication2\\Backery.API\\Controllers\\UserController.cs",
-              "ViewState": "AgIAAHAAAAAAAAAAAAAcwK8AAAAFAAAAAAAAAA==",
+              "Title": "ServiceExtension.cs",
+              "DocumentMoniker": "C:\\Users\\saras\\OneDrive\\Dokumenty\\programowanie-projekty\\C#\\WebApplication2\\WebApplication2\\ServiceExtension.cs",
+              "RelativeDocumentMoniker": "WebApplication2\\ServiceExtension.cs",
+              "ToolTip": "C:\\Users\\saras\\OneDrive\\Dokumenty\\programowanie-projekty\\C#\\WebApplication2\\WebApplication2\\ServiceExtension.cs",
+              "RelativeToolTip": "WebApplication2\\ServiceExtension.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-04T09:38:20.636Z",
+              "WhenOpened": "2025-08-10T20:11:32.887Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "IAdminsService.cs",
-              "DocumentMoniker": "C:\\Users\\saras\\OneDrive\\Dokumenty\\programowanie-projekty\\C#\\WebApplication2\\WebApplication2\\Backery.Services\\Services\\Interfaces\\IAdminsService.cs",
-              "RelativeDocumentMoniker": "WebApplication2\\Backery.Services\\Services\\Interfaces\\IAdminsService.cs",
-              "ToolTip": "C:\\Users\\saras\\OneDrive\\Dokumenty\\programowanie-projekty\\C#\\WebApplication2\\WebApplication2\\Backery.Services\\Services\\Interfaces\\IAdminsService.cs",
-              "RelativeToolTip": "WebApplication2\\Backery.Services\\Services\\Interfaces\\IAdminsService.cs",
-              "ViewState": "AgIAAAgAAAAAAAAAAAAqwBgAAAAAAAAAAAAAAA==",
+              "DocumentIndex": 3,
+              "Title": "AdMadiaService.cs",
+              "DocumentMoniker": "C:\\Users\\saras\\OneDrive\\Dokumenty\\programowanie-projekty\\C#\\WebApplication2\\WebApplication2\\Backery.Services\\Services\\AdMadiaService.cs",
+              "RelativeDocumentMoniker": "WebApplication2\\Backery.Services\\Services\\AdMadiaService.cs",
+              "ToolTip": "C:\\Users\\saras\\OneDrive\\Dokumenty\\programowanie-projekty\\C#\\WebApplication2\\WebApplication2\\Backery.Services\\Services\\AdMadiaService.cs",
+              "RelativeToolTip": "WebApplication2\\Backery.Services\\Services\\AdMadiaService.cs",
+              "ViewState": "AgIAALgAAAAAAAAAAAAcwLcAAABFAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-04T09:27:03.005Z"
+              "WhenOpened": "2025-08-10T19:57:56.666Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
-              "Title": "IUserService.cs",
-              "DocumentMoniker": "C:\\Users\\saras\\OneDrive\\Dokumenty\\programowanie-projekty\\C#\\WebApplication2\\WebApplication2\\Backery.Services\\Services\\Interfaces\\IUserService.cs",
-              "RelativeDocumentMoniker": "WebApplication2\\Backery.Services\\Services\\Interfaces\\IUserService.cs",
-              "ToolTip": "C:\\Users\\saras\\OneDrive\\Dokumenty\\programowanie-projekty\\C#\\WebApplication2\\WebApplication2\\Backery.Services\\Services\\Interfaces\\IUserService.cs",
-              "RelativeToolTip": "WebApplication2\\Backery.Services\\Services\\Interfaces\\IUserService.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABgAAABWAAAAAAAAAA==",
+              "DocumentIndex": 2,
+              "Title": "IAdMadiaService.cs",
+              "DocumentMoniker": "C:\\Users\\saras\\OneDrive\\Dokumenty\\programowanie-projekty\\C#\\WebApplication2\\WebApplication2\\Backery.Services\\Services\\Interfaces\\IAdMadiaService.cs",
+              "RelativeDocumentMoniker": "WebApplication2\\Backery.Services\\Services\\Interfaces\\IAdMadiaService.cs",
+              "ToolTip": "C:\\Users\\saras\\OneDrive\\Dokumenty\\programowanie-projekty\\C#\\WebApplication2\\WebApplication2\\Backery.Services\\Services\\Interfaces\\IAdMadiaService.cs",
+              "RelativeToolTip": "WebApplication2\\Backery.Services\\Services\\Interfaces\\IAdMadiaService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAA9AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-04T09:08:46.572Z"
+              "WhenOpened": "2025-08-10T19:58:11.862Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
-              "Title": "UserService.cs",
-              "DocumentMoniker": "C:\\Users\\saras\\OneDrive\\Dokumenty\\programowanie-projekty\\C#\\WebApplication2\\WebApplication2\\Backery.Services\\Services\\UserService.cs",
-              "RelativeDocumentMoniker": "WebApplication2\\Backery.Services\\Services\\UserService.cs",
-              "ToolTip": "C:\\Users\\saras\\OneDrive\\Dokumenty\\programowanie-projekty\\C#\\WebApplication2\\WebApplication2\\Backery.Services\\Services\\UserService.cs",
-              "RelativeToolTip": "WebApplication2\\Backery.Services\\Services\\UserService.cs",
-              "ViewState": "AgIAAA0BAAAAAAAAAAD4vzcAAAAfAAAAAAAAAA==",
+              "DocumentIndex": 1,
+              "Title": "AdMediaController.cs",
+              "DocumentMoniker": "C:\\Users\\saras\\OneDrive\\Dokumenty\\programowanie-projekty\\C#\\WebApplication2\\WebApplication2\\Backery.API\\Controllers\\AdMediaController.cs",
+              "RelativeDocumentMoniker": "WebApplication2\\Backery.API\\Controllers\\AdMediaController.cs",
+              "ToolTip": "C:\\Users\\saras\\OneDrive\\Dokumenty\\programowanie-projekty\\C#\\WebApplication2\\WebApplication2\\Backery.API\\Controllers\\AdMediaController.cs",
+              "RelativeToolTip": "WebApplication2\\Backery.API\\Controllers\\AdMediaController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAIsAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-04T09:06:41.731Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 5,
-              "Title": "AdminsController.cs",
-              "DocumentMoniker": "C:\\Users\\saras\\OneDrive\\Dokumenty\\programowanie-projekty\\C#\\WebApplication2\\WebApplication2\\Backery.API\\Controllers\\AdminsController.cs",
-              "RelativeDocumentMoniker": "WebApplication2\\Backery.API\\Controllers\\AdminsController.cs",
-              "ToolTip": "C:\\Users\\saras\\OneDrive\\Dokumenty\\programowanie-projekty\\C#\\WebApplication2\\WebApplication2\\Backery.API\\Controllers\\AdminsController.cs",
-              "RelativeToolTip": "WebApplication2\\Backery.API\\Controllers\\AdminsController.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABoAAAA4AAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-04T09:02:03.388Z"
+              "WhenOpened": "2025-08-10T19:56:50.972Z",
+              "EditorCaption": ""
             }
           ]
         }

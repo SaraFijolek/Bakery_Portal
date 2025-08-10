@@ -19,159 +19,183 @@ namespace WebApplication2.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<PagedResult<UserResponseDto>>> GetUsers([FromQuery] UserQueryDto query)
+        public async Task<ActionResult> GetUsers([FromQuery] UserQueryDto query)
         {
-            // Walidacja paginacji
+            
             if (query.PageSize > 100) query.PageSize = 100;
             if (query.PageSize < 1) query.PageSize = 10;
             if (query.Page < 1) query.Page = 1;
 
-            var users = await _userService.GetUsersAsync(query);
-            return Ok(users);
+            var result = await _userService.GetUsersAsync(query);
+
+            if (result.Success)
+                return StatusCode(result.StatusCode, result.Data);
+
+            return StatusCode(result.StatusCode, new
+            {
+                success = false,
+                message = result.Message,
+                errors = result.Errors
+            });
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<UserResponseDto>> GetUser(int id)
+        public async Task<ActionResult> GetUser(int id)
         {
             if (id <= 0)
-                return BadRequest("Invalid user ID");
+                return BadRequest(new
+                {
+                    success = false,
+                    message = "Invalid user ID",
+                    errors = new List<string> { "User ID must be greater than 0" }
+                });
 
-            var user = await _userService.GetUserByIdAsync(id);
-            if (user == null)
-                return NotFound($"User with ID {id} not found");
+            var result = await _userService.GetUserByIdAsync(id);
 
-            return Ok(user);
+            if (result.Success)
+                return StatusCode(result.StatusCode, result.Data);
+
+            return StatusCode(result.StatusCode, new
+            {
+                success = false,
+                message = result.Message,
+                errors = result.Errors
+            });
         }
 
         [HttpPost]
-        public async Task<ActionResult<UserResponseDto>> CreateUser([FromBody] UserCreateDto userCreateDto)
+        public async Task<ActionResult> CreateUser([FromBody] UserCreateDto userCreateDto)
         {
             if (!ModelState.IsValid)
-                return BadRequest(ModelState);
+                return BadRequest(new
+                {
+                    success = false,
+                    message = "Validation failed",
+                    errors = ModelState.Values.SelectMany(v => v.Errors.Select(e => e.ErrorMessage)).ToList()
+                });
 
-            try
-            {
-                var createdUser = await _userService.CreateUserAsync(userCreateDto);
-                _logger.LogInformation("User created (ID: {UserId})", createdUser.UserId);
+            var result = await _userService.CreateUserAsync(userCreateDto);
 
-                return CreatedAtAction(
-                    nameof(GetUser),
-                    new { id = createdUser.UserId },
-                    createdUser
-                );
-            }
-            catch (InvalidOperationException ex)
+            if (result.Success)
             {
-                _logger.LogWarning(ex, "Invalid operation during user creation for email={Email}", userCreateDto.Email);
-                return BadRequest(ex.Message);
+                _logger.LogInformation("User created (ID: {UserId})", result.Data?.UserId);
+                return StatusCode(result.StatusCode, result.Data);
             }
-            catch (DbUpdateException ex)
+
+            _logger.LogWarning("User creation failed for email={Email}: {Message}", userCreateDto.Email, result.Message);
+            return StatusCode(result.StatusCode, new
             {
-                _logger.LogError(ex, "Database update error during user creation for email={Email}", userCreateDto.Email);
-                return StatusCode(500, "Database error occurred.");
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Unexpected error during user creation.");
-                return StatusCode(500, "Unexpected error occurred.");
-            }
+                success = false,
+                message = result.Message,
+                errors = result.Errors
+            });
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateUser(int id, [FromBody] UserUpdateDto userUpdateDto)
+        public async Task<ActionResult> UpdateUser(int id, [FromBody] UserUpdateDto userUpdateDto)
         {
             if (id <= 0)
-                return BadRequest("Invalid user ID");
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
-
-            try
-            {
-                var success = await _userService.UpdateUserAsync(id, userUpdateDto);
-                if (!success)
+                return BadRequest(new
                 {
-                    _logger.LogInformation("Update failed: User with ID {UserId} not found", id);
-                    return NotFound($"User with ID {id} not found");
-                }
+                    success = false,
+                    message = "Invalid user ID",
+                    errors = new List<string> { "User ID must be greater than 0" }
+                });
 
+            if (!ModelState.IsValid)
+                return BadRequest(new
+                {
+                    success = false,
+                    message = "Validation failed",
+                    errors = ModelState.Values.SelectMany(v => v.Errors.Select(e => e.ErrorMessage)).ToList()
+                });
+
+            var result = await _userService.UpdateUserAsync(id, userUpdateDto);
+
+            if (result.Success)
+            {
                 _logger.LogInformation("User updated (ID: {UserId})", id);
-                return NoContent();
+                return StatusCode(result.StatusCode, new
+                {
+                    success = true,
+                    message = result.Message,
+                    data = result.Data
+                });
             }
-            catch (InvalidOperationException ex)
+
+            _logger.LogWarning("User update failed (ID: {UserId}): {Message}", id, result.Message);
+            return StatusCode(result.StatusCode, new
             {
-                _logger.LogWarning(ex, "Invalid operation during user update (ID: {UserId})", id);
-                return BadRequest(ex.Message);
-            }
-            catch (DbUpdateException ex)
-            {
-                _logger.LogError(ex, "Database update error during user update (ID: {UserId})", id);
-                return StatusCode(500, "Database error occurred.");
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Unexpected error during user update (ID: {UserId})", id);
-                return StatusCode(500, "Unexpected error occurred.");
-            }
+                success = false,
+                message = result.Message,
+                errors = result.Errors
+            });
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteUser(int id)
+        public async Task<ActionResult> DeleteUser(int id)
         {
             if (id <= 0)
-                return BadRequest("Invalid user ID");
-
-            try
-            {
-                var success = await _userService.DeleteUserAsync(id);
-                if (!success)
+                return BadRequest(new
                 {
-                    _logger.LogInformation("Delete failed: User with ID {UserId} not found", id);
-                    return NotFound($"User with ID {id} not found");
-                }
+                    success = false,
+                    message = "Invalid user ID",
+                    errors = new List<string> { "User ID must be greater than 0" }
+                });
 
+            var result = await _userService.DeleteUserAsync(id);
+
+            if (result.Success)
+            {
                 _logger.LogInformation("User deleted (ID: {UserId})", id);
-                return NoContent();
+                return StatusCode(result.StatusCode, new
+                {
+                    success = true,
+                    message = result.Message,
+                    data = result.Data
+                });
             }
-            catch (DbUpdateException ex)
+
+            _logger.LogWarning("User deletion failed (ID: {UserId}): {Message}", id, result.Message);
+            return StatusCode(result.StatusCode, new
             {
-                _logger.LogError(ex, "Database error during user deletion (ID: {UserId})", id);
-                return StatusCode(500, "Database error occurred.");
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Unexpected error during user deletion (ID: {UserId})", id);
-                return StatusCode(500, "Unexpected error occurred.");
-            }
+                success = false,
+                message = result.Message,
+                errors = result.Errors
+            });
         }
 
         [HttpPatch("{id}/status")]
-        public async Task<IActionResult> UpdateUserStatus(int id, [FromBody] bool isActive)
+        public async Task<ActionResult> UpdateUserStatus(int id, [FromBody] bool isActive)
         {
             if (id <= 0)
-                return BadRequest("Invalid user ID");
-
-            try
-            {
-                var success = await _userService.UpdateUserStatusAsync(id, isActive);
-                if (!success)
+                return BadRequest(new
                 {
-                    _logger.LogInformation("Status update failed: User with ID {UserId} not found", id);
-                    return NotFound($"User with ID {id} not found");
-                }
+                    success = false,
+                    message = "Invalid user ID",
+                    errors = new List<string> { "User ID must be greater than 0" }
+                });
 
+            var result = await _userService.UpdateUserStatusAsync(id, isActive);
+
+            if (result.Success)
+            {
                 _logger.LogInformation("User status updated (ID: {UserId}) -> IsActive={IsActive}", id, isActive);
-                return NoContent();
+                return StatusCode(result.StatusCode, new
+                {
+                    success = true,
+                    message = result.Message,
+                    data = result.Data
+                });
             }
-            catch (DbUpdateException ex)
+
+            _logger.LogWarning("User status update failed (ID: {UserId}): {Message}", id, result.Message);
+            return StatusCode(result.StatusCode, new
             {
-                _logger.LogError(ex, "Database error during status update (ID: {UserId})", id);
-                return StatusCode(500, "Database error occurred.");
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Unexpected error during status update (ID: {UserId})", id);
-                return StatusCode(500, "Unexpected error occurred.");
-            }
+                success = false,
+                message = result.Message,
+                errors = result.Errors
+            });
         }
     }
 }

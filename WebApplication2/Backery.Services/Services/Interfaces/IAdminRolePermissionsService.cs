@@ -5,11 +5,12 @@ namespace WebApplication2.Properties.Services.Interfaces
 {
     public interface IAdminRolePermissionsService
     {
-        Task<IEnumerable<AdminRolePermissionListItemDto>> GetAllAdminRolePermissionsDtoAsync();
-        Task<AdminRolePermissionResponseDto?> GetAdminRolePermissionByIdDtoAsync(int id);
-        Task<AdminRolePermissionResponseDto> CreateAdminRolePermissionAsync(CreateAdminRolePermissionDto createDto);
-        Task<bool> UpdateAdminRolePermissionAsync(int id, UpdateAdminRolePermissionDto updateDto);
-        Task<bool> DeleteAdminRolePermissionAsync(int id);
+        Task<ResultService<IEnumerable<AdminRolePermissionListItemDto>>> GetAllAdminRolePermissionsDtoAsync();
+        Task<ResultService<AdminRolePermissionResponseDto>> GetAdminRolePermissionByIdDtoAsync(int id);
+        Task<ResultService<AdminRolePermissionResponseDto>> CreateAdminRolePermissionAsync(CreateAdminRolePermissionDto createDto);
+        Task<ResultService<bool>> UpdateAdminRolePermissionAsync(int id, AdminRolePermission rolePermission);
+        Task<ResultService<bool>> DeleteAdminRolePermissionAsync(int id);
         Task<bool> AdminRolePermissionExistsAsync(int id);
+       
     }
 }

@@ -23,51 +23,87 @@ namespace WebApplication2.Controllers
 
         // GET: api/AdminAuditLogs
         [HttpGet]
-        public async Task<ActionResult<List<AdminAuditLogListItemDto>>> GetAdminAuditLogs()
+        public async Task<ActionResult<IEnumerable<AdminAuditLogDto>>> GetAdminAuditLogs()
         {
-            var logs = await _adminAuditLogsService.GetAdminAuditLogsDtoAsync();
-            return Ok(logs);
+            var result = await _adminAuditLogsService.GetAdminAuditLogsDtoAsync();
+
+            if (result.Success)
+                return StatusCode(result.StatusCode, result.Data);
+
+            return StatusCode(result.StatusCode, new
+            {
+                success = false,
+                message = result.Message,
+                errors = result.Errors
+            });
         }
 
         // GET: api/AdminAuditLogs/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<AdminAuditLogResponseDto>> GetAdminAuditLog(int id)
+        public async Task<ActionResult<AdminAuditLogDto>> GetAdminAuditLog(int id)
         {
-            var log = await _adminAuditLogsService.GetAdminAuditLogByIdDtoAsync(id);
-            if (log == null)
-                return NotFound();
+            var result = await _adminAuditLogsService.GetAdminAuditLogByIdDtoAsync(id);
 
-            return Ok(log);
+            if (result.Success)
+                return StatusCode(result.StatusCode, result.Data);
+
+            return StatusCode(result.StatusCode, new
+            {
+                success = false,
+                message = result.Message,
+                errors = result.Errors
+            });
         }
 
         // POST: api/AdminAuditLogs
         [HttpPost]
-        public async Task<ActionResult<AdminAuditLogResponseDto>> CreateAdminAuditLog(CreateAdminAuditLogDto createDto)
+        public async Task<ActionResult<AdminAuditLogDto>> CreateAdminAuditLog(CreateAdminAuditLogDto createDto)
         {
-            var createdLog = await _adminAuditLogsService.CreateAdminAuditLogAsync(createDto);
-            return CreatedAtAction(nameof(GetAdminAuditLog), new { id = createdLog.LogId }, createdLog);
+            var result = await _adminAuditLogsService.CreateAdminAuditLogAsync(createDto);
+
+            if (result.Success)
+                return StatusCode(result.StatusCode, result.Data);
+
+            return StatusCode(result.StatusCode, new
+            {
+                success = false,
+                message = result.Message,
+                errors = result.Errors
+            });
         }
 
         // PUT: api/AdminAuditLogs/5
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateAdminAuditLog(int id, UpdateAdminAuditLogDto updateDto)
         {
-            var success = await _adminAuditLogsService.UpdateAdminAuditLogAsync(id, updateDto);
-            if (!success)
-                return BadRequest();
+            var result = await _adminAuditLogsService.UpdateAdminAuditLogAsync(id, updateDto);
 
-            return NoContent();
+            if (result.Success)
+                return StatusCode(result.StatusCode, result.Data);
+
+            return StatusCode(result.StatusCode, new
+            {
+                success = false,
+                message = result.Message,
+                errors = result.Errors
+            });
         }
 
         // DELETE: api/AdminAuditLogs/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteAdminAuditLog(int id)
         {
-            var success = await _adminAuditLogsService.DeleteAdminAuditLogAsync(id);
-            if (!success)
-                return NotFound();
+            var result = await _adminAuditLogsService.DeleteAdminAuditLogAsync(id);
 
-            return NoContent();
+            if (result.Success)
+                return StatusCode(result.StatusCode, result.Data);
+
+            return StatusCode(result.StatusCode, new
+            {
+                success = false,
+                message = result.Message,
+                errors = result.Errors
+            });
         }
     }
 }

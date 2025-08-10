@@ -25,18 +25,32 @@ namespace WebApplication2.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<SubcategoryReadDto>>> GetSubcategories()
         {
-            var subcategories = await _subcategoriesService.GetAllSubcategoriesAsync();
-            return Ok(subcategories);
+            var result = await _subcategoriesService.GetAllSubcategoriesAsync();
+            if (result.Success)
+                return StatusCode(result.StatusCode, result.Data);
+
+            return StatusCode(result.StatusCode, new
+            {
+                success = false,
+                message = result.Message,
+                errors = result.Errors
+            });
         }
 
         // GET: api/Subcategories/5
         [HttpGet("{id}")]
         public async Task<ActionResult<SubcategoryReadDto>> GetSubcategory(int id)
         {
-            var subcategory = await _subcategoriesService.GetSubcategoryAsync(id);
-            if (subcategory == null)
-                return NotFound();
-            return Ok(subcategory);
+            var result = await _subcategoriesService.GetSubcategoryAsync(id);
+            if (result.Success)
+                return StatusCode(result.StatusCode, result.Data);
+
+            return StatusCode(result.StatusCode, new
+            {
+                success = false,
+                message = result.Message,
+                errors = result.Errors
+            });
         }
 
         // POST: api/Subcategories
@@ -44,12 +58,26 @@ namespace WebApplication2.Controllers
         public async Task<ActionResult<SubcategoryReadDto>> CreateSubcategory(SubcategoryCreateDto subcategoryCreateDto)
         {
             if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
+                return BadRequest(new
+                {
+                    success = false,
+                    message = "Validation failed",
+                    errors = ModelState.Values
+                                 .SelectMany(v => v.Errors)
+                                 .Select(e => e.ErrorMessage)
+                                 .ToList()
+                });
 
-            var createdSubcategory = await _subcategoriesService.CreateSubcategoryAsync(subcategoryCreateDto);
-            return CreatedAtAction(nameof(GetSubcategory), new { id = createdSubcategory.SubcategoryId }, createdSubcategory);
+            var result = await _subcategoriesService.CreateSubcategoryAsync(subcategoryCreateDto);
+            if (result.Success)
+                return StatusCode(result.StatusCode, result.Data);
+
+            return StatusCode(result.StatusCode, new
+            {
+                success = false,
+                message = result.Message,
+                errors = result.Errors
+            });
         }
 
         // PUT: api/Subcategories/5
@@ -57,38 +85,50 @@ namespace WebApplication2.Controllers
         public async Task<IActionResult> UpdateSubcategory(int id, SubcategoryUpdateDto subcategoryUpdateDto)
         {
             if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
+                return BadRequest(new
+                {
+                    success = false,
+                    message = "Validation failed",
+                    errors = ModelState.Values
+                                .SelectMany(v => v.Errors)
+                                .Select(e => e.ErrorMessage)
+                                .ToList()
+                });
 
-            if (id != subcategoryUpdateDto.SubcategoryId)
-            {
-                return BadRequest("ID mismatch");
-            }
 
-            try
+            var result = await _subcategoriesService.UpdateSubcategoryAsync(id, subcategoryUpdateDto);
+            if (result.Success)
+                return StatusCode(result.StatusCode, result.Data);
+
+            return StatusCode(result.StatusCode, new
             {
-                await _subcategoriesService.UpdateSubcategoryAsync(id, subcategoryUpdateDto);
-                return NoContent();
-            }
-            catch (ArgumentException)
-            {
-                return BadRequest("Subcategory ID mismatch");
-            }
-            catch (KeyNotFoundException)
-            {
-                return NotFound();
-            }
+                success = false,
+                message = result.Message,
+                errors = result.Errors
+            });
+
         }
+        
 
         // DELETE: api/Subcategories/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteSubcategory(int id)
         {
-            var deleted = await _subcategoriesService.DeleteSubcategoryAsync(id);
-            if (!deleted)
-                return NotFound();
-            return NoContent();
+            var result = await _subcategoriesService.DeleteSubcategoryAsync(id);
+            if (result.Success)
+                return StatusCode(result.StatusCode, new
+                {
+                    success = true,
+                    message = result.Message,
+                    data = result.Data
+                });
+
+            return StatusCode(result.StatusCode, new
+            {
+                success = false,
+                message = result.Message,
+                errors = result.Errors
+            });
         }
     }
 }

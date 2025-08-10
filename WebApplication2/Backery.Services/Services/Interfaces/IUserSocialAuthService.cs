@@ -5,11 +5,11 @@ namespace WebApplication2.Properties.Services.Interfaces
 {
     public interface IUserSocialAuthService
     {
-        Task<List<UserSocialAuthDto>> GetUserSocialAuthsAsync();
-        Task<UserSocialAuthDto> GetUserSocialAuthByIdAsync(int id);
-        Task<UserSocialAuthDto> CreateUserSocialAuthAsync(CreateUserSocialAuthDto createDto);
-        Task<bool> UpdateUserSocialAuthAsync(int id, UpdateUserSocialAuthDto updateDto);
-        Task<bool> DeleteUserSocialAuthAsync(int id);
+        Task<UserSocialAuthsService<List<UserSocialAuthDto>>> GetUserSocialAuthsAsync();
+        Task<UserSocialAuthsService<UserSocialAuthDto>> GetUserSocialAuthByIdAsync(int id);
+        Task<UserSocialAuthsService<UserSocialAuthDto>> CreateUserSocialAuthAsync(CreateUserSocialAuthDto createDto);
+        Task<UserSocialAuthsService<UserSocialAuthDto>> UpdateUserSocialAuthAsync(int id, UpdateUserSocialAuthDto updateDto);
+        Task<UserSocialAuthsService<bool>> DeleteUserSocialAuthAsync(int id);
         Task<bool> UserSocialAuthExistsAsync(int id);
     }
 }

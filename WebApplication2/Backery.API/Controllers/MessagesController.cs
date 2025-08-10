@@ -5,7 +5,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using WebApplication2.DTO;
 using WebApplication2.Properties.Data;
+using WebApplication2.Properties.DTOs;
 using WebApplication2.Properties.Models;
+using WebApplication2.Properties.Services;
 using WebApplication2.Properties.Services.Interfaces;
 
 namespace WebApplication2.Controllers
@@ -25,20 +27,35 @@ namespace WebApplication2.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<MessageReadDto>>> GetMessages()
         {
-            var messages = await _messagesService.GetAllMessagesAsync();
-            return Ok(messages);
+            var result = await _messagesService.GetAllMessagesAsync();
+            if (result.Success)
+                return StatusCode(result.StatusCode, result.Data);
+
+            return StatusCode(result.StatusCode, new
+            {
+                success = false,
+                message = result.Message,
+                errors = result.Errors
+            });
+
         }
 
         // GET: api/Messages/5
         [HttpGet("{id}")]
         public async Task<ActionResult<MessageReadDto>> GetMessage(int id)
         {
-            var message = await _messagesService.GetMessageAsync(id);
-            if (message == null)
-                return NotFound();
+            var result = await _messagesService.GetMessageAsync(id);
+            if (result.Success)
+                return StatusCode(result.StatusCode, result.Data);
 
-            return Ok(message);
+            return StatusCode(result.StatusCode, new
+            {
+                success = false,
+                message = result.Message,
+                errors = result.Errors
+            });
         }
+
 
         // POST: api/Messages
         [HttpPost]
@@ -46,11 +63,24 @@ namespace WebApplication2.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest(ModelState);
+                return BadRequest(new
+                {
+                    success = false,
+                    message = "Model validation failed",
+                    errors = ModelState.SelectMany(x => x.Value.Errors.Select(e => e.ErrorMessage)).ToList()
+                });
             }
 
-            var createdMessage = await _messagesService.CreateMessageAsync(messageCreateDto);
-            return CreatedAtAction(nameof(GetMessage), new { id = createdMessage.MessageId }, createdMessage);
+            var result = await _messagesService.CreateMessageAsync(messageCreateDto);
+            if (result.Success)
+                return StatusCode(result.StatusCode, result.Data);
+
+            return StatusCode(result.StatusCode, new
+            {
+                success = false,
+                message = result.Message,
+                errors = result.Errors
+            });
         }
 
         // PUT: api/Messages/5
@@ -59,38 +89,39 @@ namespace WebApplication2.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest(ModelState);
-            }
+                return BadRequest(new
+                {
+                    success = false,
+                    message = "Model validation failed",
+                    errors = ModelState.SelectMany(x => x.Value.Errors.Select(e => e.ErrorMessage)).ToList()
+                });
 
-            if (id != messageUpdateDto.MessageId)
-            {
-                return BadRequest("ID mismatch");
             }
+            var result = await _messagesService.UpdateMessageAsync(id, messageUpdateDto);
+            if (result.Success)
+                return StatusCode(result.StatusCode, result.Data);
 
-            try
+            return StatusCode(result.StatusCode, new
             {
-                await _messagesService.UpdateMessageAsync(id, messageUpdateDto);
-                return NoContent();
-            }
-            catch (ArgumentException)
-            {
-                return BadRequest("Message ID mismatch");
-            }
-            catch (KeyNotFoundException)
-            {
-                return NotFound();
-            }
+                success = false,
+                message = result.Message,
+                errors = result.Errors
+            });
+
         }
+        
 
         // DELETE: api/Messages/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteMessage(int id)
         {
-            var deleted = await _messagesService.DeleteMessageAsync(id);
-            if (!deleted)
-                return NotFound();
-
-            return NoContent();
+            var result = await _messagesService.DeleteMessageAsync(id);
+            return StatusCode(result.StatusCode, new
+            {
+                success = false,
+                message = result.Message,
+                errors = result.Errors
+            });
         }
     }
 }

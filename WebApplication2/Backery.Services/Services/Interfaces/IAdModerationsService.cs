@@ -5,11 +5,11 @@ namespace WebApplication2.Properties.Services.Interfaces
 {
     public interface IAdModerationsService
     {
-        Task<IEnumerable<AdModerationDto>> GetAdModerationsAsync();
-        Task<AdModerationDto?> GetAdModerationByIdAsync(int id);
-        Task<AdModerationDto> CreateAdModerationAsync(CreateAdModerationDto createDto);
-        Task<AdModerationDto> UpdateAdModerationAsync(int id, UpdateAdModerationDto updateDto);
-        Task<bool> DeleteAdModerationAsync(int id);
+        Task<AdModerationService<IEnumerable<AdModerationDto>>> GetAdModerationsAsync();
+        Task<AdModerationService<AdModerationDto>> GetAdModerationByIdAsync(int id);
+        Task<AdModerationService<AdModerationDto>> CreateAdModerationAsync(CreateAdModerationDto createDto);
+        Task<AdModerationService<AdModerationDto>> UpdateAdModerationAsync(int id, UpdateAdModerationDto updateDto);
+        Task<AdModerationService<bool>> DeleteAdModerationAsync(int id);
         Task<bool> AdModerationExistsAsync(int id);
     }
 }

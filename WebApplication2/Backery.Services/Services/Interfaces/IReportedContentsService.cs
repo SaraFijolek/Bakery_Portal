@@ -5,11 +5,11 @@ namespace WebApplication2.Properties.Services.Interfaces
 {
     public interface IReportedContentsService
     {
-        Task<IEnumerable<ReportedContentReadDto>> GetReportedContentsAsync();
-        Task<ReportedContentReadDto?> GetReportedContentAsync(int id);
-        Task<ReportedContentReadDto> CreateReportedContentAsync(CreateReportedContentDto createDto);
-        Task<ReportedContentReadDto> UpdateReportedContentAsync(int id, UpdateReportedContentDto updateDto);
-        Task<bool> DeleteReportedContentAsync(int id);
+        Task<ReportedContentService<IEnumerable<ReportedContentReadDto>>> GetReportedContentsAsync();
+        Task<ReportedContentService<ReportedContentReadDto>> GetReportedContentAsync(int id);
+        Task<ReportedContentService<ReportedContentReadDto>> CreateReportedContentAsync(CreateReportedContentDto createDto);
+        Task<ReportedContentService<ReportedContentReadDto>> UpdateReportedContentAsync(int id, UpdateReportedContentDto updateDto);
+        Task<ReportedContentService<bool>> DeleteReportedContentAsync(int id);
         Task<bool> ReportedContentExistsAsync(int id);
     }
 }

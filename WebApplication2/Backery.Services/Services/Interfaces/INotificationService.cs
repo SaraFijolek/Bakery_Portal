@@ -5,11 +5,11 @@ namespace WebApplication2.Properties.Services.Interfaces
 {
     public interface INotificationService
     {
-        Task<IEnumerable<NotificationDto>> GetNotificationsAsync();
-        Task<NotificationDto?> GetNotificationByIdAsync(int id);
-        Task<NotificationDto> CreateNotificationAsync(CreateNotificationDto createNotificationDto);
-        Task<NotificationDto> UpdateNotificationAsync(int id, UpdateNotificationDto updateNotificationDto);
-        Task<bool> DeleteNotificationAsync(int id);
+        Task<NotificationsService<IEnumerable<NotificationDto>>> GetNotificationsAsync();
+        Task<NotificationsService<NotificationDto>> GetNotificationByIdAsync(int id);
+        Task<NotificationsService<NotificationDto>> CreateNotificationAsync(CreateNotificationDto createNotificationDto);
+        Task<NotificationsService<NotificationDto>> UpdateNotificationAsync(int id, UpdateNotificationDto updateNotificationDto);
+        Task<NotificationsService<bool>> DeleteNotificationAsync(int id);
         Task<bool> NotificationExistsAsync(int id);
     }
 }

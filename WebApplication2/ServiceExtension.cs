@@ -1,5 +1,4 @@
-﻿using System.Runtime.CompilerServices;
-using WebApplication2.Properties.Services;
+﻿using WebApplication2.Properties.Services;
 using WebApplication2.Properties.Services.Interfaces;
 
 namespace WebApplication2

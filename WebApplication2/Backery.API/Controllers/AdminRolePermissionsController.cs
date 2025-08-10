@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 using WebApplication2.DTO;
 using WebApplication2.Properties.Data;
 using WebApplication2.Properties.Models;
+using WebApplication2.Properties.Services;
 using WebApplication2.Properties.Services.Interfaces;
-
 
 namespace WebApplication2.Controllers
 {
@@ -26,49 +26,71 @@ namespace WebApplication2.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<AdminRolePermissionListItemDto>>> GetAdminRolePermissions()
         {
-            var rolePermissions = await _adminRolePermissionsService.GetAllAdminRolePermissionsDtoAsync();
-            return Ok(rolePermissions);
+            var result = await _adminRolePermissionsService.GetAllAdminRolePermissionsDtoAsync();
+
+            if (result.Success)
+                return StatusCode(result.StatusCode, result.Data);
+
+            return StatusCode(result.StatusCode, new
+            {
+                success = false,
+                message = result.Message,
+                errors = result.Errors
+            });
         }
 
         // GET: api/AdminRolePermissions/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<AdminRolePermissionResponseDto>> GetAdminRolePermission(int id)
+        public async Task<ActionResult<AdminRolePermissionListItemDto>> GetAdminRolePermission(int id)
         {
-            var rolePermission = await _adminRolePermissionsService.GetAdminRolePermissionByIdDtoAsync(id);
-            if (rolePermission == null)
-                return NotFound();
+            var result = await _adminRolePermissionsService.GetAdminRolePermissionByIdDtoAsync(id);
 
-            return Ok(rolePermission);
+            if (result.Success)
+                return StatusCode(result.StatusCode, result.Data);
+
+            return StatusCode(result.StatusCode, new
+            {
+                success = false,
+                message = result.Message,
+                errors = result.Errors
+            });
         }
 
         // POST: api/AdminRolePermissions
         [HttpPost]
-        public async Task<ActionResult<AdminRolePermissionResponseDto>> CreateAdminRolePermission(CreateAdminRolePermissionDto createDto)
+        public async Task<ActionResult<AdminRolePermissionListItemDto>> CreateAdminRolePermission(CreateAdminRolePermissionDto createDto)
         {
-            var createdRolePermission = await _adminRolePermissionsService.CreateAdminRolePermissionAsync(createDto);
-            return CreatedAtAction(nameof(GetAdminRolePermission), new { id = createdRolePermission.RolePermissionId }, createdRolePermission);
+            var result = await _adminRolePermissionsService.CreateAdminRolePermissionAsync(createDto);
+
+            if (result.Success)
+                return StatusCode(result.StatusCode, result.Data);
+
+            return StatusCode(result.StatusCode, new
+            {
+                success = false,
+                message = result.Message,
+                errors = result.Errors
+            });
         }
 
-        // PUT: api/AdminRolePermissions/5
-        [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateAdminRolePermission(int id, UpdateAdminRolePermissionDto updateDto)
-        {
-            var result = await _adminRolePermissionsService.UpdateAdminRolePermissionAsync(id, updateDto);
-            if (!result)
-                return BadRequest();
-
-            return NoContent();
-        }
+       
+        
 
         // DELETE: api/AdminRolePermissions/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteAdminRolePermission(int id)
         {
             var result = await _adminRolePermissionsService.DeleteAdminRolePermissionAsync(id);
-            if (!result)
-                return NotFound();
 
-            return NoContent();
+            if (result.Success)
+                return StatusCode(result.StatusCode, result.Data);
+
+            return StatusCode(result.StatusCode, new
+            {
+                success = false,
+                message = result.Message,
+                errors = result.Errors
+            });
         }
     }
 }

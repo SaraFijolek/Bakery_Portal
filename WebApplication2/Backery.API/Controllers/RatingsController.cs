@@ -8,7 +8,6 @@ using WebApplication2.Properties.DTOs;
 using WebApplication2.Properties.Models;
 using WebApplication2.Properties.Services.Interfaces;
 
-
 namespace WebApplication2.Controllers
 {
     [ApiController]
@@ -24,63 +23,103 @@ namespace WebApplication2.Controllers
 
         // GET: api/Ratings
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<RatingDto>>> GetRatings()
+        public async Task<ActionResult> GetRatings()
         {
-            var ratings = await _ratingsService.GetRatingsAsync();
-            return Ok(ratings);
+            var result = await _ratingsService.GetRatingsAsync();
+
+            if (result.Success)
+                return StatusCode(result.StatusCode, result.Data);
+
+            return StatusCode(result.StatusCode, new
+            {
+                success = false,
+                message = result.Message,
+                errors = result.Errors
+            });
         }
 
         // GET: api/Ratings/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<RatingDto>> GetRating(int id)
+        public async Task<ActionResult> GetRating(int id)
         {
-            var rating = await _ratingsService.GetRatingByIdAsync(id);
-            if (rating == null)
-                return NotFound();
-            return Ok(rating);
+            var result = await _ratingsService.GetRatingByIdAsync(id);
+
+            if (result.Success)
+                return StatusCode(result.StatusCode, result.Data);
+
+            return StatusCode(result.StatusCode, new
+            {
+                success = false,
+                message = result.Message,
+                errors = result.Errors
+            });
         }
 
         // POST: api/Ratings
         [HttpPost]
-        public async Task<ActionResult<RatingDto>> CreateRating(CreateRatingDto createRatingDto)
+        public async Task<ActionResult> CreateRating(CreateRatingDto createRatingDto)
         {
             if (!ModelState.IsValid)
-                return BadRequest(ModelState);
+                return BadRequest(new
+                {
+                    success = false,
+                    message = "Model validation failed",
+                    errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList()
+                });
 
-            var createdRating = await _ratingsService.CreateRatingAsync(createRatingDto);
-            return CreatedAtAction(nameof(GetRating), new { id = createdRating.RatingId }, createdRating);
+            var result = await _ratingsService.CreateRatingAsync(createRatingDto);
+
+            if (result.Success)
+                return StatusCode(result.StatusCode, result.Data);
+
+            return StatusCode(result.StatusCode, new
+            {
+                success = false,
+                message = result.Message,
+                errors = result.Errors
+            });
         }
 
         // PUT: api/Ratings/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateRating(int id, UpdateRatingDto updateRatingDto)
+        public async Task<ActionResult> UpdateRating(int id, UpdateRatingDto updateRatingDto)
         {
             if (!ModelState.IsValid)
-                return BadRequest(ModelState);
+                return BadRequest(new
+                {
+                    success = false,
+                    message = "Model validation failed",
+                    errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList()
+                });
 
-            try
+            var result = await _ratingsService.UpdateRatingAsync(id, updateRatingDto);
+
+            if (result.Success)
+                return StatusCode(result.StatusCode, result.Data);
+
+            return StatusCode(result.StatusCode, new
             {
-                var updatedRating = await _ratingsService.UpdateRatingAsync(id, updateRatingDto);
-                return Ok(updatedRating);
-            }
-            catch (ArgumentException)
-            {
-                return BadRequest();
-            }
-            catch (KeyNotFoundException)
-            {
-                return NotFound();
-            }
+                success = false,
+                message = result.Message,
+                errors = result.Errors
+            });
         }
 
         // DELETE: api/Ratings/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteRating(int id)
+        public async Task<ActionResult> DeleteRating(int id)
         {
-            var deleted = await _ratingsService.DeleteRatingAsync(id);
-            if (!deleted)
-                return NotFound();
-            return NoContent();
+            var result = await _ratingsService.DeleteRatingAsync(id);
+
+            if (result.Success)
+                return StatusCode(result.StatusCode, result.Data);
+
+            return StatusCode(result.StatusCode, new
+            {
+                success = false,
+                message = result.Message,
+                errors = result.Errors
+            });
         }
     }
 }

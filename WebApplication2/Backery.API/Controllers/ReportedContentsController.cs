@@ -27,19 +27,32 @@ namespace WebApplication2.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<ReportedContentDto>>> GetReportedContents()
         {
-            var reportedContents = await _reportedContentsService.GetReportedContentsAsync();
-            return Ok(reportedContents);
+            var result = await _reportedContentsService.GetReportedContentsAsync();
+            if (result.Success)
+                return StatusCode(result.StatusCode, result.Data);
+
+            return StatusCode(result.StatusCode, new
+            {
+                success = false,
+                message = result.Message,
+                errors = result.Errors
+            });
         }
 
         // GET: api/ReportedContents/5
         [HttpGet("{id}")]
         public async Task<ActionResult<ReportedContentDto>> GetReportedContent(int id)
         {
-            var report = await _reportedContentsService.GetReportedContentAsync(id);
-            if (report == null)
-                return NotFound();
+            var result = await _reportedContentsService.GetReportedContentAsync(id);
+            if (result.Success)
+                return StatusCode(result.StatusCode, result.Data);
 
-            return Ok(report);
+            return StatusCode(result.StatusCode, new
+            {
+                success = false,
+                message = result.Message,
+                errors = result.Errors
+            });
         }
 
         // POST: api/ReportedContents
@@ -47,11 +60,26 @@ namespace WebApplication2.Controllers
         public async Task<ActionResult<ReportedContentDto>> CreateReportedContent(CreateReportedContentDto createDto)
         {
             if (!ModelState.IsValid)
-                return BadRequest(ModelState);
+                return BadRequest(new
+                {
+                    success = false,
+                    message = "Validation failed",
+                    errors = ModelState.Values
+                          .SelectMany(v => v.Errors)
+                          .Select(e => e.ErrorMessage)
+                          .ToList()
+                });
 
-            var createdReport = await _reportedContentsService.CreateReportedContentAsync(createDto);
-            return CreatedAtAction(nameof(GetReportedContent),
-                new { id = createdReport.ReportId }, createdReport);
+            var result = await _reportedContentsService.CreateReportedContentAsync(createDto);
+            if (result.Success)
+                return StatusCode(result.StatusCode, result.Data);
+
+            return StatusCode(result.StatusCode, new
+            {
+                success = false,
+                message = result.Message,
+                errors = result.Errors
+            });
         }
 
         // PUT: api/ReportedContents/5
@@ -59,28 +87,50 @@ namespace WebApplication2.Controllers
         public async Task<ActionResult<ReportedContentDto>> UpdateReportedContent(int id, UpdateReportedContentDto updateDto)
         {
             if (!ModelState.IsValid)
-                return BadRequest(ModelState);
+                return BadRequest(new
+                {
+                    success = false,
+                    message = "Validation failed",
+                    errors = ModelState.Values
+                           .SelectMany(v => v.Errors)
+                           .Select(e => e.ErrorMessage)
+                           .ToList()
+                });
 
-            try
-            {
-                var updatedReport = await _reportedContentsService.UpdateReportedContentAsync(id, updateDto);
-                return Ok(updatedReport);
-            }
-            catch (KeyNotFoundException)
-            {
-                return NotFound();
-            }
+            var result = await _reportedContentsService.UpdateReportedContentAsync(id, updateDto);
+
+            if (!result.Success)
+                return StatusCode(result.StatusCode, new
+                {
+                    success = false,
+                    message = result.Message,
+                    errors = result.Errors
+                });
+
+            return StatusCode(result.StatusCode, result.Data);
+
+
         }
 
         // DELETE: api/ReportedContents/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteReportedContent(int id)
         {
-            var deleted = await _reportedContentsService.DeleteReportedContentAsync(id);
-            if (!deleted)
-                return NotFound();
+            var result = await _reportedContentsService.DeleteReportedContentAsync(id);
+            if (result.Success)
+                return StatusCode(result.StatusCode, new
+                {
+                    success = true,
+                    message = result.Message,
+                    data = result.Data
+                });
 
-            return NoContent();
+            return StatusCode(result.StatusCode, new
+            {
+                success = false,
+                message = result.Message,
+                errors = result.Errors
+            });
         }
     }
 }

@@ -10,7 +10,7 @@ using WebApplication2.Properties.Services.Interfaces;
 
 namespace WebApplication2.Controllers
 {
-    
+
 
     namespace WebApplication2.Controllers
     {
@@ -27,65 +27,114 @@ namespace WebApplication2.Controllers
 
             // GET: api/Categories
             [HttpGet]
-            public async Task<ActionResult<IEnumerable<CategoryDto>>> GetCategories()
+            public async Task<ActionResult> GetCategories()
             {
-                var categories = await _categoryService.GetAllCategoriesAsync();
-                return Ok(categories);
+                var result = await _categoryService.GetAllCategoriesAsync();
+
+                if (result.Success)
+                    return StatusCode(result.StatusCode, result.Data);
+
+                return StatusCode(result.StatusCode, new
+                {
+                    success = false,
+                    message = result.Message,
+                    errors = result.Errors
+                });
             }
 
             // GET: api/Categories/5
             [HttpGet("{id}")]
-            public async Task<ActionResult<CategoryDto>> GetCategory(int id)
+            public async Task<ActionResult> GetCategory(int id)
             {
-                var category = await _categoryService.GetCategoryAsync(id);
-                if (category == null)
-                    return NotFound();
+                var result = await _categoryService.GetCategoryAsync(id);
 
-                return Ok(category);
+                if (result.Success)
+                    return StatusCode(result.StatusCode, result.Data);
+
+                return StatusCode(result.StatusCode, new
+                {
+                    success = false,
+                    message = result.Message,
+                    errors = result.Errors
+                });
             }
 
             // POST: api/Categories
             [HttpPost]
-            public async Task<ActionResult<CategoryDto>> CreateCategory(CreateCategoryDto createCategoryDto)
+            public async Task<ActionResult> CreateCategory(CreateCategoryDto createCategoryDto)
             {
                 if (!ModelState.IsValid)
-                    return BadRequest(ModelState);
+                    return BadRequest(new
+                    {
+                        success = false,
+                        message = "Validation failed",
+                        errors = ModelState.Values
+                            .SelectMany(v => v.Errors)
+                            .Select(e => e.ErrorMessage)
+                            .ToList()
+                    });
 
-                var createdCategory = await _categoryService.CreateCategoryAsync(createCategoryDto);
-                return CreatedAtAction(nameof(GetCategory), new { id = createdCategory.CategoryId }, createdCategory);
+                var result = await _categoryService.CreateCategoryAsync(createCategoryDto);
+
+                if (result.Success)
+                    return StatusCode(result.StatusCode, result.Data);
+
+                return StatusCode(result.StatusCode, new
+                {
+                    success = false,
+                    message = result.Message,
+                    errors = result.Errors
+                });
             }
 
             // PUT: api/Categories/5
             [HttpPut("{id}")]
-            public async Task<IActionResult> UpdateCategory(int id, UpdateCategoryDto updateCategoryDto)
+            public async Task<ActionResult> UpdateCategory(int id, UpdateCategoryDto updateCategoryDto)
             {
                 if (!ModelState.IsValid)
-                    return BadRequest(ModelState);
+                    return BadRequest(new
+                    {
+                        success = false,
+                        message = "Validation failed",
+                        errors = ModelState.Values
+                            .SelectMany(v => v.Errors)
+                            .Select(e => e.ErrorMessage)
+                            .ToList()
+                    });
 
-                try
+                var result = await _categoryService.UpdateCategoryAsync(id, updateCategoryDto);
+
+                if (result.Success)
+                    return StatusCode(result.StatusCode, result.Data);
+
+                return StatusCode(result.StatusCode, new
                 {
-                    var updatedCategory = await _categoryService.UpdateCategoryAsync(id, updateCategoryDto);
-                    return Ok(updatedCategory);
-                }
-                catch (ArgumentException)
-                {
-                    return BadRequest();
-                }
-                catch (KeyNotFoundException)
-                {
-                    return NotFound();
-                }
+                    success = false,
+                    message = result.Message,
+                    errors = result.Errors
+                });
             }
 
             // DELETE: api/Categories/5
             [HttpDelete("{id}")]
-            public async Task<IActionResult> DeleteCategory(int id)
+            public async Task<ActionResult> DeleteCategory(int id)
             {
-                var deleted = await _categoryService.DeleteCategoryAsync(id);
-                if (!deleted)
-                    return NotFound();
+                var result = await _categoryService.DeleteCategoryAsync(id);
 
-                return NoContent();
+                if (result.Success)
+                    return StatusCode(result.StatusCode, new
+                    {
+                        success = true,
+                        message = result.Message,
+                        data = result.Data
+                    });
+
+                return StatusCode(result.StatusCode, new
+                {
+                    success = false,
+                    message = result.Message,
+                    errors = result.Errors
+                });
             }
         }
     }

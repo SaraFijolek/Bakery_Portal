@@ -8,7 +8,6 @@ using WebApplication2.Properties.Data;
 using WebApplication2.Properties.Models;
 using WebApplication2.Properties.Services.Interfaces;
 
-
 namespace WebApplication2.Controllers
 {
     [ApiController]
@@ -24,32 +23,56 @@ namespace WebApplication2.Controllers
 
         // GET: api/UserSocialAuth
         [HttpGet]
-        public async Task<ActionResult<List<UserSocialAuthDto>>> GetUserSocialAuths()
+        public async Task<ActionResult<IEnumerable<UserSocialAuth>>> GetUserSocialAuths()
         {
-            var auths = await _userSocialAuthService.GetUserSocialAuthsAsync();
-            return Ok(auths);
+            var result = await _userSocialAuthService.GetUserSocialAuthsAsync();
+
+            if (result.Success)
+                return StatusCode(result.StatusCode, result.Data);
+
+            return StatusCode(result.StatusCode, new
+            {
+                success = false,
+                message = result.Message,
+                errors = result.Errors
+            });
         }
 
         // GET: api/UserSocialAuth/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<UserSocialAuthDto>> GetUserSocialAuth(int id)
+        public async Task<ActionResult<UserSocialAuth>> GetUserSocialAuth(int id)
         {
-            var auth = await _userSocialAuthService.GetUserSocialAuthByIdAsync(id);
-            if (auth == null)
-                return NotFound();
+            var result = await _userSocialAuthService.GetUserSocialAuthByIdAsync(id);
 
-            return Ok(auth);
+            if (result.Success)
+                return StatusCode(result.StatusCode, result.Data);
+
+            return StatusCode(result.StatusCode, new
+            {
+                success = false,
+                message = result.Message,
+                errors = result.Errors
+            });
         }
 
         // POST: api/UserSocialAuth
         [HttpPost]
-        public async Task<ActionResult<UserSocialAuthDto>> CreateUserSocialAuth(CreateUserSocialAuthDto createDto)
+        public async Task<ActionResult<UserSocialAuth>> CreateUserSocialAuth(CreateUserSocialAuthDto createDto)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var createdAuth = await _userSocialAuthService.CreateUserSocialAuthAsync(createDto);
-            return CreatedAtAction(nameof(GetUserSocialAuth), new { id = createdAuth.SocialAuthId }, createdAuth);
+            var result = await _userSocialAuthService.CreateUserSocialAuthAsync(createDto);
+
+            if (result.Success)
+                return StatusCode(result.StatusCode, result.Data);
+
+            return StatusCode(result.StatusCode, new
+            {
+                success = false,
+                message = result.Message,
+                errors = result.Errors
+            });
         }
 
         // PUT: api/UserSocialAuth/5
@@ -59,22 +82,34 @@ namespace WebApplication2.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var success = await _userSocialAuthService.UpdateUserSocialAuthAsync(id, updateDto);
-            if (!success)
-                return NotFound();
+            var result = await _userSocialAuthService.UpdateUserSocialAuthAsync(id, updateDto);
 
-            return NoContent();
+            if (result.Success)
+                return StatusCode(result.StatusCode, result.Data);
+
+            return StatusCode(result.StatusCode, new
+            {
+                success = false,
+                message = result.Message,
+                errors = result.Errors
+            });
         }
 
         // DELETE: api/UserSocialAuth/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteUserSocialAuth(int id)
         {
-            var success = await _userSocialAuthService.DeleteUserSocialAuthAsync(id);
-            if (!success)
-                return NotFound();
+            var result = await _userSocialAuthService.DeleteUserSocialAuthAsync(id);
 
-            return NoContent();
+            if (result.Success)
+                return StatusCode(result.StatusCode, result.Data);
+
+            return StatusCode(result.StatusCode, new
+            {
+                success = false,
+                message = result.Message,
+                errors = result.Errors
+            });
         }
     }
 }

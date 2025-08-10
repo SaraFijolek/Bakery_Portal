@@ -26,19 +26,32 @@ namespace WebApplication2.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<AdModerationDto>>> GetAdModerations()
         {
-            var moderations = await _adModerationsService.GetAdModerationsAsync();
-            return Ok(moderations);
+            var result = await _adModerationsService.GetAdModerationsAsync();
+            if (result.Success)
+                return StatusCode(result.StatusCode, result.Data);
+
+            return StatusCode(result.StatusCode, new
+            {
+                success = false,
+                message = result.Message,
+                errors = result.Errors
+            });
         }
 
         // GET: api/AdModerations/5
         [HttpGet("{id}")]
         public async Task<ActionResult<AdModerationDto>> GetAdModeration(int id)
         {
-            var moderation = await _adModerationsService.GetAdModerationByIdAsync(id);
-            if (moderation == null)
-                return NotFound();
+            var result = await _adModerationsService.GetAdModerationByIdAsync(id);
+            if (result.Success)
+                return StatusCode(result.StatusCode, result.Data);
 
-            return Ok(moderation);
+            return StatusCode(result.StatusCode, new
+            {
+                success = false,
+                message = result.Message,
+                errors = result.Errors
+            });
         }
 
         // POST: api/AdModerations
@@ -46,11 +59,23 @@ namespace WebApplication2.Controllers
         public async Task<ActionResult<AdModerationDto>> CreateAdModeration(CreateAdModerationDto createDto)
         {
             if (!ModelState.IsValid)
-                return BadRequest(ModelState);
+                return BadRequest(new
+                {
+                    success = false,
+                    message = "Invalid model state",
+                    errors = ModelState.Values.SelectMany(v => v.Errors.Select(e => e.ErrorMessage)).ToList()
+                });
 
-            var createdModeration = await _adModerationsService.CreateAdModerationAsync(createDto);
-            return CreatedAtAction(nameof(GetAdModeration),
-                new { id = createdModeration.ModerationId }, createdModeration);
+            var result = await _adModerationsService.CreateAdModerationAsync(createDto);
+            if (result.Success)
+                return StatusCode(result.StatusCode, result.Data);
+
+            return StatusCode(result.StatusCode, new
+            {
+                success = false,
+                message = result.Message,
+                errors = result.Errors
+            });
         }
 
         // PUT: api/AdModerations/5
@@ -58,28 +83,43 @@ namespace WebApplication2.Controllers
         public async Task<ActionResult<AdModerationDto>> UpdateAdModeration(int id, UpdateAdModerationDto updateDto)
         {
             if (!ModelState.IsValid)
-                return BadRequest(ModelState);
+                return BadRequest(new
+                {
+                    success = false,
+                    message = "Invalid model state",
+                    errors = ModelState.Values.SelectMany(v => v.Errors.Select(e => e.ErrorMessage)).ToList()
+                });
+           
+            
+                var result = await _adModerationsService.UpdateAdModerationAsync(id, updateDto);
+            if (result.Success)
+                return StatusCode(result.StatusCode, result.Data);
 
-            try
+            return StatusCode(result.StatusCode, new
             {
-                var updatedModeration = await _adModerationsService.UpdateAdModerationAsync(id, updateDto);
-                return Ok(updatedModeration);
-            }
-            catch (KeyNotFoundException)
-            {
-                return NotFound();
-            }
+                success = false,
+                message = result.Message,
+                errors = result.Errors
+            });
+
+
+
         }
 
         // DELETE: api/AdModerations/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteAdModeration(int id)
         {
-            var deleted = await _adModerationsService.DeleteAdModerationAsync(id);
-            if (!deleted)
-                return NotFound();
+            var result = await _adModerationsService.DeleteAdModerationAsync(id);
+            if (result.Success)
+                return StatusCode(result.StatusCode, result.Data);
 
-            return NoContent();
+            return StatusCode(result.StatusCode, new
+            {
+                success = false,
+                message = result.Message,
+                errors = result.Errors
+            });
         }
     }
 }

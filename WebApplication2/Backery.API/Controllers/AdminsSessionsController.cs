@@ -26,28 +26,51 @@ namespace WebApplication2.Controllers
         [HttpGet]
         public async Task<ActionResult<List<AdminSessionDto>>> GetAdminSessions()
         {
-            var sessions = await _adminsSessionsService.GetAllAdminSessionsAsync();
-            return Ok(sessions);
+            var result = await _adminsSessionsService.GetAllAdminSessionsAsync();
+
+            if (result.Success)
+                return StatusCode(result.StatusCode, result.Data);
+
+            return StatusCode(result.StatusCode, new
+            {
+                success = false,
+                message = result.Message,
+                errors = result.Errors
+            });
         }
 
         // GET: api/AdminsSessions/list (optimized for listing without full navigation data)
         [HttpGet("list")]
         public async Task<ActionResult<List<AdminSessionListDto>>> GetAdminSessionsList()
         {
-            var sessions = await _adminsSessionsService.GetAllAdminSessionsListAsync();
-            return Ok(sessions);
+            var result = await _adminsSessionsService.GetAllAdminSessionsListAsync();
+
+            if (result.Success)
+                return StatusCode(result.StatusCode, result.Data);
+
+            return StatusCode(result.StatusCode, new
+            {
+                success = false,
+                message = result.Message,
+                errors = result.Errors
+            });
         }
 
         // GET: api/AdminsSessions/5
         [HttpGet("{id}")]
         public async Task<ActionResult<AdminSessionDto>> GetAdminSession(int id)
         {
-            var session = await _adminsSessionsService.GetAdminSessionByIdAsync(id);
-            if (session == null)
+            var result = await _adminsSessionsService.GetAdminSessionByIdAsync(id);
+
+            if (result.Success)
+                return StatusCode(result.StatusCode, result.Data);
+
+            return StatusCode(result.StatusCode, new
             {
-                return NotFound();
-            }
-            return Ok(session);
+                success = false,
+                message = result.Message,
+                errors = result.Errors
+            });
         }
 
         // POST: api/AdminsSessions
@@ -59,8 +82,17 @@ namespace WebApplication2.Controllers
                 return BadRequest(ModelState);
             }
 
-            var createdSession = await _adminsSessionsService.CreateAdminSessionAsync(sessionDto);
-            return CreatedAtAction(nameof(GetAdminSession), new { id = createdSession.SessionId }, createdSession);
+            var result = await _adminsSessionsService.CreateAdminSessionAsync(sessionDto);
+
+            if (result.Success)
+                return StatusCode(result.StatusCode, result.Data);
+
+            return StatusCode(result.StatusCode, new
+            {
+                success = false,
+                message = result.Message,
+                errors = result.Errors
+            });
         }
 
         // PUT: api/AdminsSessions/5
@@ -73,12 +105,16 @@ namespace WebApplication2.Controllers
             }
 
             var result = await _adminsSessionsService.UpdateAdminSessionAsync(id, sessionDto);
-            if (!result)
-            {
-                return NotFound();
-            }
 
-            return NoContent();
+            if (result.Success)
+                return StatusCode(result.StatusCode, result.Data);
+
+            return StatusCode(result.StatusCode, new
+            {
+                success = false,
+                message = result.Message,
+                errors = result.Errors
+            });
         }
 
         // DELETE: api/AdminsSessions/5
@@ -86,12 +122,16 @@ namespace WebApplication2.Controllers
         public async Task<IActionResult> DeleteAdminSession(int id)
         {
             var result = await _adminsSessionsService.DeleteAdminSessionAsync(id);
-            if (!result)
-            {
-                return NotFound();
-            }
 
-            return NoContent();
+            if (result.Success)
+                return StatusCode(result.StatusCode, result.Data);
+
+            return StatusCode(result.StatusCode, new
+            {
+                success = false,
+                message = result.Message,
+                errors = result.Errors
+            });
         }
     }
 }

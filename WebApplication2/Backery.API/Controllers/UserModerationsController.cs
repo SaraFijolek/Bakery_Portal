@@ -23,56 +23,112 @@ namespace WebApplication2.Controllers
 
         // GET: api/UserModerations
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<UserModerationDto>>> GetUserModerations()
+        public async Task<IActionResult> GetUserModerations()
         {
-            var moderations = await _userModerationsService.GetUserModerationsAsync();
-            return Ok(moderations);
+            var result = await _userModerationsService.GetUserModerationsAsync();
+
+            if (result.Success)
+                return StatusCode(result.StatusCode, result.Data);
+
+            return StatusCode(result.StatusCode, new
+            {
+                success = false,
+                message = result.Message,
+                errors = result.Errors
+            });
         }
 
         // GET: api/UserModerations/list
         [HttpGet("list")]
-        public async Task<ActionResult<IEnumerable<UserModerationListDto>>> GetUserModerationsList()
+        public async Task<IActionResult> GetUserModerationsList()
         {
-            var moderations = await _userModerationsService.GetUserModerationsListAsync();
-            return Ok(moderations);
+            var result = await _userModerationsService.GetUserModerationsListAsync();
+
+            if (result.Success)
+                return StatusCode(result.StatusCode, result.Data);
+
+            return StatusCode(result.StatusCode, new
+            {
+                success = false,
+                message = result.Message,
+                errors = result.Errors
+            });
         }
 
         // GET: api/UserModerations/active
         [HttpGet("active")]
-        public async Task<ActionResult<IEnumerable<UserModerationDto>>> GetActiveUserModerations()
+        public async Task<IActionResult> GetActiveUserModerations()
         {
-            var moderations = await _userModerationsService.GetActiveUserModerationsAsync();
-            return Ok(moderations);
+            var result = await _userModerationsService.GetActiveUserModerationsAsync();
+
+            if (result.Success)
+                return StatusCode(result.StatusCode, result.Data);
+
+            return StatusCode(result.StatusCode, new
+            {
+                success = false,
+                message = result.Message,
+                errors = result.Errors
+            });
         }
 
         // GET: api/UserModerations/user/5
         [HttpGet("user/{userId}")]
-        public async Task<ActionResult<IEnumerable<UserModerationDto>>> GetUserModerationsByUserId(int userId)
+        public async Task<IActionResult> GetUserModerationsByUserId(int userId)
         {
-            var moderations = await _userModerationsService.GetUserModerationsByUserIdAsync(userId);
-            return Ok(moderations);
+            var result = await _userModerationsService.GetUserModerationsByUserIdAsync(userId);
+
+            if (result.Success)
+                return StatusCode(result.StatusCode, result.Data);
+
+            return StatusCode(result.StatusCode, new
+            {
+                success = false,
+                message = result.Message,
+                errors = result.Errors
+            });
         }
 
         // GET: api/UserModerations/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<UserModerationDto>> GetUserModeration(int id)
+        public async Task<IActionResult> GetUserModeration(int id)
         {
-            var moderation = await _userModerationsService.GetUserModerationByIdAsync(id);
-            if (moderation == null)
-                return NotFound();
+            var result = await _userModerationsService.GetUserModerationByIdAsync(id);
 
-            return Ok(moderation);
+            if (result.Success)
+                return StatusCode(result.StatusCode, result.Data);
+
+            return StatusCode(result.StatusCode, new
+            {
+                success = false,
+                message = result.Message,
+                errors = result.Errors
+            });
         }
 
         // POST: api/UserModerations
         [HttpPost]
-        public async Task<ActionResult<UserModerationDto>> CreateUserModeration(CreateUserModerationDto createDto)
+        public async Task<IActionResult> CreateUserModeration(CreateUserModerationDto createDto)
         {
             if (!ModelState.IsValid)
-                return BadRequest(ModelState);
+                return BadRequest(new
+                {
+                    success = false,
+                    message = "Invalid model state",
+                    errors = ModelState.Values.SelectMany(v => v.Errors.Select(e => e.ErrorMessage)).ToList()
+                });
 
-            var createdModeration = await _userModerationsService.CreateUserModerationAsync(createDto);
-            return CreatedAtAction(nameof(GetUserModeration), new { id = createdModeration.ModerationId }, createdModeration);
+            var result = await _userModerationsService.CreateUserModerationAsync(createDto);
+
+            if (result.Success)
+                return StatusCode(result.StatusCode, result.Data);
+
+            return StatusCode(result.StatusCode, new
+            {
+                success = false,
+                message = result.Message,
+                errors = result.Errors
+            });
         }
 
         // PUT: api/UserModerations/5
@@ -80,24 +136,41 @@ namespace WebApplication2.Controllers
         public async Task<IActionResult> UpdateUserModeration(int id, UpdateUserModerationDto updateDto)
         {
             if (!ModelState.IsValid)
-                return BadRequest(ModelState);
+                return BadRequest(new
+                {
+                    success = false,
+                    message = "Invalid model state",
+                    errors = ModelState.Values.SelectMany(v => v.Errors.Select(e => e.ErrorMessage)).ToList()
+                });
 
-            var success = await _userModerationsService.UpdateUserModerationAsync(id, updateDto);
-            if (!success)
-                return NotFound();
+            var result = await _userModerationsService.UpdateUserModerationAsync(id, updateDto);
 
-            return NoContent();
+            if (result.Success)
+                return StatusCode(result.StatusCode, result.Data);
+
+            return StatusCode(result.StatusCode, new
+            {
+                success = false,
+                message = result.Message,
+                errors = result.Errors
+            });
         }
 
         // DELETE: api/UserModerations/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteUserModeration(int id)
         {
-            var success = await _userModerationsService.DeleteUserModerationAsync(id);
-            if (!success)
-                return NotFound();
+            var result = await _userModerationsService.DeleteUserModerationAsync(id);
 
-            return NoContent();
+            if (result.Success)
+                return StatusCode(result.StatusCode, result.Data);
+
+            return StatusCode(result.StatusCode, new
+            {
+                success = false,
+                message = result.Message,
+                errors = result.Errors
+            });
         }
     }
 }

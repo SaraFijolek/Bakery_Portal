@@ -7,11 +7,11 @@ namespace WebApplication2.Properties.Services.Interfaces
 {
     public interface IAdMadiaService
     {
-        Task<IEnumerable<AdMediaResponseDto>> GetAllAdMediaAsync();
-        Task<AdMediaResponseDto?> GetAdMediaByIdAsync(int id);
-        Task<AdMediaResponseDto> CreateAdMediaAsync(CreateAdMediaDto createAdMediaDto);
-        Task<bool> UpdateAdMediaAsync(int id, UpdateAdMediaDto updateAdMediaDto);
-        Task<bool> DeleteAdMediaAsync(int id);
+        Task<ResultService<IEnumerable<AdMediaResponseDto>>> GetAllAdMediaAsync();
+        Task<ResultService<AdMediaResponseDto>> GetAdMediaByIdAsync(int id);
+        Task<ResultService<AdMediaResponseDto>> CreateAdMediaAsync(CreateAdMediaDto createAdMediaDto);
+        Task<ResultService<bool>> UpdateAdMediaAsync(int id, UpdateAdMediaDto updateAdMediaDto);
+        Task<ResultService<bool>> DeleteAdMediaAsync(int id);
         Task<bool> AdMediaExistsAsync(int id);
     }
 }

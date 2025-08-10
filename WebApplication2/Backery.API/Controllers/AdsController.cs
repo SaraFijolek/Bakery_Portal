@@ -18,44 +18,98 @@ namespace WebApplication2.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<AdResponseDto>>> GetAds()
+        public async Task<ActionResult> GetAds()
         {
-            var ads = await _adsService.GetAllAdsAsync();
-            return Ok(ads);
+            var result = await _adsService.GetAllAdsAsync();
+
+            if (result.Success)
+                return StatusCode(result.StatusCode, result.Data);
+
+            return StatusCode(result.StatusCode, new
+            {
+                success = false,
+                message = result.Message,
+                errors = result.Errors
+            });
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<AdResponseDto>> GetAd(int id)
+        public async Task<ActionResult> GetAd(int id)
         {
-            var ad = await _adsService.GetAdByIdAsync(id);
-            if (ad == null) return NotFound();
-            return Ok(ad);
+            var result = await _adsService.GetAdByIdAsync(id);
+
+            if (result.Success)
+                return StatusCode(result.StatusCode, result.Data);
+
+            return StatusCode(result.StatusCode, new
+            {
+                success = false,
+                message = result.Message,
+                errors = result.Errors
+            });
         }
 
         [HttpPost]
-        public async Task<ActionResult<AdResponseDto>> CreateAd([FromBody] AdCreateDto dto)
+        public async Task<ActionResult> CreateAd([FromBody] AdCreateDto dto)
         {
-            var created = await _adsService.CreateAdAsync(dto);
-            return CreatedAtAction(nameof(GetAd), new { id = created.AdId }, created);
+            var result = await _adsService.CreateAdAsync(dto);
+
+            if (result.Success)
+                return StatusCode(result.StatusCode, result.Data);
+
+            return StatusCode(result.StatusCode, new
+            {
+                success = false,
+                message = result.Message,
+                errors = result.Errors
+            });
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateAd(int id, [FromBody] AdUpdateDto dto)
+        public async Task<ActionResult> UpdateAd(int id, [FromBody] AdUpdateDto dto)
         {
-            if (id != dto.AdId) return BadRequest();
+            if (id != dto.AdId)
+            {
+                return BadRequest(new
+                {
+                    success = false,
+                    message = "ID mismatch between route and request body",
+                    errors = new List<string> { "The ID in the URL does not match the ID in the request body" }
+                });
+            }
 
-            var ok = await _adsService.UpdateAdAsync(dto);
-            if (!ok) return NotFound();
+            var result = await _adsService.UpdateAdAsync(dto);
 
-            return NoContent();
+            if (result.Success)
+                return StatusCode(result.StatusCode, result.Data);
+
+            return StatusCode(result.StatusCode, new
+            {
+                success = false,
+                message = result.Message,
+                errors = result.Errors
+            });
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteAd(int id)
+        public async Task<ActionResult> DeleteAd(int id)
         {
-            var ok = await _adsService.DeleteAdAsync(id);
-            if (!ok) return NotFound();
-            return NoContent();
+            var result = await _adsService.DeleteAdAsync(id);
+
+            if (result.Success)
+                return StatusCode(result.StatusCode, new
+                {
+                    success = true,
+                    message = result.Message,
+                    data = result.Data
+                });
+
+            return StatusCode(result.StatusCode, new
+            {
+                success = false,
+                message = result.Message,
+                errors = result.Errors
+            });
         }
     }
 }

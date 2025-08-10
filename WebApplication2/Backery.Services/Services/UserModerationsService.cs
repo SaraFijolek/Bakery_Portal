@@ -2,10 +2,46 @@
 using WebApplication2.DTO;
 using WebApplication2.Properties.Data;
 using WebApplication2.Properties.Models;
+using WebApplication2.Properties.Services;
 using WebApplication2.Properties.Services.Interfaces;
 
 namespace WebApplication2.Properties.Services
 {
+    public class UserModerationService<T>
+    {
+        public bool Success { get; set; }
+        public T? Data { get; set; }
+        public string? Message { get; set; }
+        public List<string>? Errors { get; set; }
+        public int StatusCode { get; set; }
+
+        public static UserModerationService<T> GoodResult(
+            string message,
+            int statusCode,
+            T? data = default) => new UserModerationService<T>
+            {
+                Message = message,
+                StatusCode = statusCode,
+                Success = true,
+                Data = data
+            };
+
+        public static UserModerationService<T> BadResult(
+            string message,
+            int statusCode,
+            List<string>? errors = null,
+            T? data = default) => new UserModerationService<T>
+            {
+                Message = message,
+                StatusCode = statusCode,
+                Success = false,
+                Errors = errors ?? new List<string>(),
+                Data = data
+            };
+    }
+
+
+
     public class UserModerationsService : IUserModerationsService
     {
         private readonly AppDbContext _context;
@@ -15,120 +51,254 @@ namespace WebApplication2.Properties.Services
             _context = context;
         }
 
-        public async Task<List<UserModerationDto>> GetUserModerationsAsync()
+        public async Task<UserModerationService<List<UserModerationDto>>> GetUserModerationsAsync()
         {
-            var moderations = await _context.UserModerations
-                .Include(um => um.User)
-                .Include(um => um.Admin)
-                .ToListAsync();
-
-            return moderations.Select(MapToDto).ToList();
-        }
-
-        public async Task<List<UserModerationListDto>> GetUserModerationsListAsync()
-        {
-            var moderations = await _context.UserModerations
-                .Include(um => um.User)
-                .Include(um => um.Admin)
-                .ToListAsync();
-
-            return moderations.Select(MapToListDto).ToList();
-        }
-
-        public async Task<UserModerationDto?> GetUserModerationByIdAsync(int id)
-        {
-            var moderation = await _context.UserModerations
-                .Include(um => um.User)
-                .Include(um => um.Admin)
-                .FirstOrDefaultAsync(um => um.ModerationId == id);
-
-            return moderation != null ? MapToDto(moderation) : null;
-        }
-
-        public async Task<List<UserModerationDto>> GetUserModerationsByUserIdAsync(int userId)
-        {
-            var moderations = await _context.UserModerations
-                .Include(um => um.User)
-                .Include(um => um.Admin)
-                .Where(um => um.UserId == userId)
-                .ToListAsync();
-
-            return moderations.Select(MapToDto).ToList();
-        }
-
-        public async Task<List<UserModerationDto>> GetActiveUserModerationsAsync()
-        {
-            var moderations = await _context.UserModerations
-                .Include(um => um.User)
-                .Include(um => um.Admin)
-                .Where(um => um.IsActive)
-                .ToListAsync();
-
-            return moderations.Select(MapToDto).ToList();
-        }
-
-        public async Task<UserModerationDto> CreateUserModerationAsync(CreateUserModerationDto createDto)
-        {
-            var moderation = new UserModeration
-            {
-                UserId = createDto.UserId,
-                AdminId = createDto.AdminId,
-                Action = createDto.Action,
-                Reason = createDto.Reason,
-                DurationHours = createDto.DurationHours,
-                CreatedAt = DateTime.Now,
-                ExpiresAt = createDto.ExpiresAt,
-                IsActive = createDto.IsActive
-            };
-
-            _context.UserModerations.Add(moderation);
-            await _context.SaveChangesAsync();
-
-            // Reload with navigation properties
-            var createdModeration = await _context.UserModerations
-                .Include(um => um.User)
-                .Include(um => um.Admin)
-                .FirstAsync(um => um.ModerationId == moderation.ModerationId);
-
-            return MapToDto(createdModeration);
-        }
-
-        public async Task<bool> UpdateUserModerationAsync(int id, UpdateUserModerationDto updateDto)
-        {
-            var moderation = await _context.UserModerations.FindAsync(id);
-            if (moderation == null)
-                return false;
-
-            moderation.UserId = updateDto.UserId;
-            moderation.AdminId = updateDto.AdminId;
-            moderation.Action = updateDto.Action;
-            moderation.Reason = updateDto.Reason;
-            moderation.DurationHours = updateDto.DurationHours;
-            moderation.ExpiresAt = updateDto.ExpiresAt;
-            moderation.IsActive = updateDto.IsActive;
-
             try
             {
+                var moderations = await _context.UserModerations
+                    .Include(um => um.User)
+                    .Include(um => um.Admin)
+                    .ToListAsync();
+
+                var result = moderations.Select(MapToDto).ToList();
+
+                return UserModerationService<List<UserModerationDto>>.GoodResult(
+                    "User moderations retrieved successfully",
+                    200,
+                    result);
+            }
+            catch (Exception ex)
+            {
+                return UserModerationService<List<UserModerationDto>>.BadResult(
+                    "Error retrieving user moderations",
+                    500,
+                    new List<string> { ex.Message });
+            }
+        }
+
+        public async Task<UserModerationService<List<UserModerationListDto>>> GetUserModerationsListAsync()
+        {
+            try
+            {
+                var moderations = await _context.UserModerations
+                    .Include(um => um.User)
+                    .Include(um => um.Admin)
+                    .ToListAsync();
+
+                var result = moderations.Select(MapToListDto).ToList();
+
+                return UserModerationService<List<UserModerationListDto>>.GoodResult(
+                    "User moderations list retrieved successfully",
+                    200,
+                    result);
+            }
+            catch (Exception ex)
+            {
+                return UserModerationService<List<UserModerationListDto>>.BadResult(
+                    "Error retrieving user moderations list",
+                    500,
+                    new List<string> { ex.Message });
+            }
+        }
+
+        public async Task<UserModerationService<UserModerationDto>> GetUserModerationByIdAsync(int id)
+        {
+            try
+            {
+                var moderation = await _context.UserModerations
+                    .Include(um => um.User)
+                    .Include(um => um.Admin)
+                    .FirstOrDefaultAsync(um => um.ModerationId == id);
+
+                if (moderation == null)
+                {
+                    return UserModerationService<UserModerationDto>.BadResult(
+                        "User moderation not found",
+                        404);
+                }
+
+                return UserModerationService<UserModerationDto>.GoodResult(
+                    "User moderation retrieved successfully",
+                    200,
+                    MapToDto(moderation));
+            }
+            catch (Exception ex)
+            {
+                return UserModerationService<UserModerationDto>.BadResult(
+                    "Error retrieving user moderation",
+                    500,
+                    new List<string> { ex.Message });
+            }
+        }
+
+        public async Task<UserModerationService<List<UserModerationDto>>> GetUserModerationsByUserIdAsync(int userId)
+        {
+            try
+            {
+                var moderations = await _context.UserModerations
+                    .Include(um => um.User)
+                    .Include(um => um.Admin)
+                    .Where(um => um.UserId == userId)
+                    .ToListAsync();
+
+                var result = moderations.Select(MapToDto).ToList();
+
+                return UserModerationService<List<UserModerationDto>>.GoodResult(
+                    "User moderations retrieved successfully",
+                    200,
+                    result);
+            }
+            catch (Exception ex)
+            {
+                return UserModerationService<List<UserModerationDto>>.BadResult(
+                    "Error retrieving user moderations",
+                    500,
+                    new List<string> { ex.Message });
+            }
+        }
+
+        public async Task<UserModerationService<List<UserModerationDto>>> GetActiveUserModerationsAsync()
+        {
+            try
+            {
+                var moderations = await _context.UserModerations
+                    .Include(um => um.User)
+                    .Include(um => um.Admin)
+                    .Where(um => um.IsActive)
+                    .ToListAsync();
+
+                var result = moderations.Select(MapToDto).ToList();
+
+                return UserModerationService<List<UserModerationDto>>.GoodResult(
+                    "Active user moderations retrieved successfully",
+                    200,
+                    result);
+            }
+            catch (Exception ex)
+            {
+                return UserModerationService<List<UserModerationDto>>.BadResult(
+                    "Error retrieving active user moderations",
+                    500,
+                    new List<string> { ex.Message });
+            }
+        }
+
+        public async Task<UserModerationService<UserModerationDto>> CreateUserModerationAsync(CreateUserModerationDto createDto)
+        {
+            try
+            {
+                var moderation = new UserModeration
+                {
+                    UserId = createDto.UserId,
+                    AdminId = createDto.AdminId,
+                    Action = createDto.Action,
+                    Reason = createDto.Reason,
+                    DurationHours = createDto.DurationHours,
+                    CreatedAt = DateTime.Now,
+                    ExpiresAt = createDto.ExpiresAt,
+                    IsActive = createDto.IsActive
+                };
+
+                _context.UserModerations.Add(moderation);
                 await _context.SaveChangesAsync();
-                return true;
+
+                // Reload with navigation properties
+                var createdModeration = await _context.UserModerations
+                    .Include(um => um.User)
+                    .Include(um => um.Admin)
+                    .FirstAsync(um => um.ModerationId == moderation.ModerationId);
+
+                return UserModerationService<UserModerationDto>.GoodResult(
+                    "User moderation created successfully",
+                    201,
+                    MapToDto(createdModeration));
+            }
+            catch (Exception ex)
+            {
+                return UserModerationService<UserModerationDto>.BadResult(
+                    "Error creating user moderation",
+                    500,
+                    new List<string> { ex.Message });
+            }
+        }
+
+        public async Task<UserModerationService<bool>> UpdateUserModerationAsync(int id, UpdateUserModerationDto updateDto)
+        {
+            try
+            {
+                var moderation = await _context.UserModerations.FindAsync(id);
+                if (moderation == null)
+                {
+                    return UserModerationService<bool>.BadResult(
+                        "User moderation not found",
+                        404);
+                }
+
+                moderation.UserId = updateDto.UserId;
+                moderation.AdminId = updateDto.AdminId;
+                moderation.Action = updateDto.Action;
+                moderation.Reason = updateDto.Reason;
+                moderation.DurationHours = updateDto.DurationHours;
+                moderation.ExpiresAt = updateDto.ExpiresAt;
+                moderation.IsActive = updateDto.IsActive;
+
+                await _context.SaveChangesAsync();
+
+                return UserModerationService<bool>.GoodResult(
+                    "User moderation updated successfully",
+                    200,
+                    true);
             }
             catch (DbUpdateConcurrencyException)
             {
                 if (!await UserModerationExistsAsync(id))
-                    return false;
-                throw;
+                {
+                    return UserModerationService<bool>.BadResult(
+                        "User moderation not found",
+                        404);
+                }
+
+                return UserModerationService<bool>.BadResult(
+                    "Concurrency error occurred while updating user moderation",
+                    409,
+                    new List<string> { "The record was modified by another user. Please refresh and try again." });
+            }
+            catch (Exception ex)
+            {
+                return UserModerationService<bool>.BadResult(
+                    "Error updating user moderation",
+                    500,
+                    new List<string> { ex.Message });
             }
         }
 
-        public async Task<bool> DeleteUserModerationAsync(int id)
+        public async Task<UserModerationService<bool>> DeleteUserModerationAsync(int id)
         {
-            var moderation = await _context.UserModerations.FindAsync(id);
-            if (moderation == null)
-                return false;
+            try
+            {
+                var moderation = await _context.UserModerations.FindAsync(id);
+                if (moderation == null)
+                {
+                    return UserModerationService<bool>.BadResult(
+                        "User moderation not found",
+                        404);
+                }
 
-            _context.UserModerations.Remove(moderation);
-            await _context.SaveChangesAsync();
-            return true;
+                _context.UserModerations.Remove(moderation);
+                await _context.SaveChangesAsync();
+
+                return UserModerationService<bool>.GoodResult(
+                    "User moderation deleted successfully",
+                    200,
+                    true);
+            }
+            catch (Exception ex)
+            {
+                return UserModerationService<bool>.BadResult(
+                    "Error deleting user moderation",
+                    500,
+                    new List<string> { ex.Message });
+            }
         }
 
         public async Task<bool> UserModerationExistsAsync(int id)
@@ -186,4 +356,3 @@ namespace WebApplication2.Properties.Services
         }
     }
 }
-

@@ -26,20 +26,32 @@ namespace WebApplication2.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<CommentReadDto>>> GetComments()
         {
-            var comments = await _commentsService.GetAllCommentsAsync();
-            return Ok(comments);
+            var result = await _commentsService.GetAllCommentsAsync();
+            if (result.Success)
+                return StatusCode(result.StatusCode, result.Data);
+
+            return StatusCode(result.StatusCode, new
+            {
+                success = false,
+                message = result.Message,
+                errors = result.Errors
+            });
         }
 
         // GET: api/Comments/5
         [HttpGet("{id}")]
         public async Task<ActionResult<CommentReadDto>> GetComment(int id)
         {
-            var comment = await _commentsService.GetCommentByIdAsync(id);
-            if (comment == null)
+            var result = await _commentsService.GetCommentByIdAsync(id);
+            if (result.Success)
+                return StatusCode(result.StatusCode, result.Data);
+
+            return StatusCode(result.StatusCode, new
             {
-                return NotFound();
-            }
-            return Ok(comment);
+                success = false,
+                message = result.Message,
+                errors = result.Errors
+            });
         }
 
         // POST: api/Comments
@@ -48,11 +60,24 @@ namespace WebApplication2.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest(ModelState);
+                return BadRequest(new
+                {
+                    success = false,
+                    message = "Model validation failed",
+                    errors = ModelState.SelectMany(x => x.Value.Errors.Select(e => e.ErrorMessage)).ToList()
+                });
             }
 
-            var createdComment = await _commentsService.CreateCommentAsync(commentCreateDto);
-            return CreatedAtAction(nameof(GetComment), new { id = createdComment.CommentId }, createdComment);
+            var result = await _commentsService.CreateCommentAsync(commentCreateDto);
+            if (result.Success)
+                return StatusCode(result.StatusCode, result.Data);
+
+            return StatusCode(result.StatusCode, new
+            {
+                success = false,
+                message = result.Message,
+                errors = result.Errors
+            });
         }
 
         // PUT: api/Comments/5
@@ -61,21 +86,34 @@ namespace WebApplication2.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest(ModelState);
+                return BadRequest(new
+                {
+                    success = false,
+                    message = "Model validation failed",
+                    errors = ModelState.SelectMany(x => x.Value.Errors.Select(e => e.ErrorMessage)).ToList()
+                });
             }
 
             if (id != commentUpdateDto.CommentId)
             {
-                return BadRequest("ID mismatch");
+                return BadRequest(new
+                {
+                    success = false,
+                    message = "ID mismatch",
+                    errors = new List<string> { "The provided ID does not match the comment ID in the request body" }
+                });
             }
 
             var result = await _commentsService.UpdateCommentAsync(id, commentUpdateDto);
-            if (!result)
-            {
-                return NotFound();
-            }
+            if (result.Success)
+                return StatusCode(result.StatusCode, result.Data);
 
-            return NoContent();
+            return StatusCode(result.StatusCode, new
+            {
+                success = false,
+                message = result.Message,
+                errors = result.Errors
+            });
         }
 
         // DELETE: api/Comments/5
@@ -83,11 +121,15 @@ namespace WebApplication2.Controllers
         public async Task<IActionResult> DeleteComment(int id)
         {
             var result = await _commentsService.DeleteCommentAsync(id);
-            if (!result)
+            if (result.Success)
+                return StatusCode(result.StatusCode, result.Data);
+
+            return StatusCode(result.StatusCode, new
             {
-                return NotFound();
-            }
-            return NoContent();
+                success = false,
+                message = result.Message,
+                errors = result.Errors
+            });
         }
     }
 }

@@ -25,27 +25,51 @@ namespace WebApplication2.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<AdminPermissionListItemDto>>> GetAdminPermissions()
         {
-            var permissions = await _adminPermissionsService.GetAllAdminPermissionsDtoAsync();
-            return Ok(permissions);
+            var result = await _adminPermissionsService.GetAllAdminPermissionsDtoAsync();
+
+            if (result.Success)
+                return StatusCode(result.StatusCode, result.Data);
+
+            return StatusCode(result.StatusCode, new
+            {
+                success = false,
+                message = result.Message,
+                errors = result.Errors
+            });
         }
 
         // GET: api/AdminPermissions/5
         [HttpGet("{id}")]
         public async Task<ActionResult<AdminPermissionListItemDto>> GetAdminPermission(int id)
         {
-            var permission = await _adminPermissionsService.GetAdminPermissionByIdDtoAsync(id);
-            if (permission == null)
-                return NotFound();
+            var result = await _adminPermissionsService.GetAdminPermissionByIdDtoAsync(id);
 
-            return Ok(permission);
+            if (result.Success)
+                return StatusCode(result.StatusCode, result.Data);
+
+            return StatusCode(result.StatusCode, new
+            {
+                success = false,
+                message = result.Message,
+                errors = result.Errors
+            });
         }
 
         // POST: api/AdminPermissions
         [HttpPost]
         public async Task<ActionResult<AdminPermissionResponseDto>> CreateAdminPermission(CreateAdminPermissionDto createDto)
         {
-            var createdPermission = await _adminPermissionsService.CreateAdminPermissionAsync(createDto);
-            return CreatedAtAction(nameof(GetAdminPermission), new { id = createdPermission.PermissionId }, createdPermission);
+            var result = await _adminPermissionsService.CreateAdminPermissionAsync(createDto);
+
+            if (result.Success)
+                return StatusCode(result.StatusCode, result.Data);
+
+            return StatusCode(result.StatusCode, new
+            {
+                success = false,
+                message = result.Message,
+                errors = result.Errors
+            });
         }
 
         // PUT: api/AdminPermissions/5
@@ -53,10 +77,16 @@ namespace WebApplication2.Controllers
         public async Task<IActionResult> UpdateAdminPermission(int id, UpdateAdminPermissionDto updateDto)
         {
             var result = await _adminPermissionsService.UpdateAdminPermissionAsync(id, updateDto);
-            if (!result)
-                return BadRequest();
 
-            return NoContent();
+            if (result.Success)
+                return StatusCode(result.StatusCode, result.Data);
+
+            return StatusCode(result.StatusCode, new
+            {
+                success = false,
+                message = result.Message,
+                errors = result.Errors
+            });
         }
 
         // DELETE: api/AdminPermissions/5
@@ -64,10 +94,16 @@ namespace WebApplication2.Controllers
         public async Task<IActionResult> DeleteAdminPermission(int id)
         {
             var result = await _adminPermissionsService.DeleteAdminPermissionAsync(id);
-            if (!result)
-                return NotFound();
 
-            return NoContent();
+            if (result.Success)
+                return StatusCode(result.StatusCode, result.Data);
+
+            return StatusCode(result.StatusCode, new
+            {
+                success = false,
+                message = result.Message,
+                errors = result.Errors
+            });
         }
     }
 }

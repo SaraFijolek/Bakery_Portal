@@ -11,11 +11,14 @@ namespace WebApplication2.Properties.Services.Interfaces
     public interface IAdsService
     {
 
-        Task<IEnumerable<AdResponseDto>> GetAllAdsAsync();
-        Task<AdResponseDto?> GetAdByIdAsync(int id);
-        Task<AdResponseDto> CreateAdAsync(AdCreateDto dto);
-        Task<bool> UpdateAdAsync(AdUpdateDto dto);
-        Task<bool> DeleteAdAsync(int id);
-        Task<bool> AdExistsAsync(int id);
+        Task<AdService<IEnumerable<AdResponseDto>>> GetAllAdsAsync();
+
+        Task<AdService<AdResponseDto>> GetAdByIdAsync(int id);
+        Task<AdService<AdResponseDto>> CreateAdAsync(AdCreateDto dto);
+        Task<AdService<bool>> UpdateAdAsync(AdUpdateDto dto);
+        Task<AdService<bool>> DeleteAdAsync(int id);
+        Task<AdService<bool>> AdExistsAsync(int id);
+
+
     }
 }
