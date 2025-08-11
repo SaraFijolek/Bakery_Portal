@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,6 +25,7 @@ namespace WebApplication2.Controllers
 
         // GET: api/Comments
         [HttpGet]
+        [AllowAnonymous]
         public async Task<ActionResult<IEnumerable<CommentReadDto>>> GetComments()
         {
             var result = await _commentsService.GetAllCommentsAsync();
@@ -40,6 +42,7 @@ namespace WebApplication2.Controllers
 
         // GET: api/Comments/5
         [HttpGet("{id}")]
+        [AllowAnonymous]
         public async Task<ActionResult<CommentReadDto>> GetComment(int id)
         {
             var result = await _commentsService.GetCommentByIdAsync(id);
@@ -56,6 +59,7 @@ namespace WebApplication2.Controllers
 
         // POST: api/Comments
         [HttpPost]
+        [Authorize]
         public async Task<ActionResult<CommentReadDto>> CreateComment(CommentCreateDto commentCreateDto)
         {
             if (!ModelState.IsValid)
@@ -82,6 +86,7 @@ namespace WebApplication2.Controllers
 
         // PUT: api/Comments/5
         [HttpPut("{id}")]
+        [Authorize(Roles ="Admin,User")]
         public async Task<IActionResult> UpdateComment(int id, CommentUpdateDto commentUpdateDto)
         {
             if (!ModelState.IsValid)
@@ -118,6 +123,7 @@ namespace WebApplication2.Controllers
 
         // DELETE: api/Comments/5
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteComment(int id)
         {
             var result = await _commentsService.DeleteCommentAsync(id);

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,6 +25,7 @@ namespace WebApplication2.Controllers
 
         // GET: api/AdModerations
         [HttpGet]
+        [AllowAnonymous] 
         public async Task<ActionResult<IEnumerable<AdModerationDto>>> GetAdModerations()
         {
             var result = await _adModerationsService.GetAdModerationsAsync();
@@ -40,6 +42,7 @@ namespace WebApplication2.Controllers
 
         // GET: api/AdModerations/5
         [HttpGet("{id}")]
+        [AllowAnonymous]
         public async Task<ActionResult<AdModerationDto>> GetAdModeration(int id)
         {
             var result = await _adModerationsService.GetAdModerationByIdAsync(id);
@@ -56,6 +59,7 @@ namespace WebApplication2.Controllers
 
         // POST: api/AdModerations
         [HttpPost]
+        [Authorize]
         public async Task<ActionResult<AdModerationDto>> CreateAdModeration(CreateAdModerationDto createDto)
         {
             if (!ModelState.IsValid)
@@ -80,6 +84,7 @@ namespace WebApplication2.Controllers
 
         // PUT: api/AdModerations/5
         [HttpPut("{id}")]
+        [Authorize(Roles = "Admin,User")]
         public async Task<ActionResult<AdModerationDto>> UpdateAdModeration(int id, UpdateAdModerationDto updateDto)
         {
             if (!ModelState.IsValid)
@@ -108,6 +113,7 @@ namespace WebApplication2.Controllers
 
         // DELETE: api/AdModerations/5
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteAdModeration(int id)
         {
             var result = await _adModerationsService.DeleteAdModerationAsync(id);

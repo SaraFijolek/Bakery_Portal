@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,6 +28,7 @@ namespace WebApplication2.Controllers
 
             // GET: api/Categories
             [HttpGet]
+            [AllowAnonymous]
             public async Task<ActionResult> GetCategories()
             {
                 var result = await _categoryService.GetAllCategoriesAsync();
@@ -44,6 +46,7 @@ namespace WebApplication2.Controllers
 
             // GET: api/Categories/5
             [HttpGet("{id}")]
+            [AllowAnonymous]
             public async Task<ActionResult> GetCategory(int id)
             {
                 var result = await _categoryService.GetCategoryAsync(id);
@@ -61,6 +64,7 @@ namespace WebApplication2.Controllers
 
             // POST: api/Categories
             [HttpPost]
+            [Authorize]
             public async Task<ActionResult> CreateCategory(CreateCategoryDto createCategoryDto)
             {
                 if (!ModelState.IsValid)
@@ -89,6 +93,7 @@ namespace WebApplication2.Controllers
 
             // PUT: api/Categories/5
             [HttpPut("{id}")]
+            [Authorize(Roles = "Admin,User")]
             public async Task<ActionResult> UpdateCategory(int id, UpdateCategoryDto updateCategoryDto)
             {
                 if (!ModelState.IsValid)
@@ -117,6 +122,7 @@ namespace WebApplication2.Controllers
 
             // DELETE: api/Categories/5
             [HttpDelete("{id}")]
+            [Authorize(Roles ="Admin")]
             public async Task<ActionResult> DeleteCategory(int id)
             {
                 var result = await _categoryService.DeleteCategoryAsync(id);

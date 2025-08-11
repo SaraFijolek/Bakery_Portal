@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,6 +25,7 @@ namespace WebApplication2.Controllers
 
         // GET: api/AdminRolePermissions
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult<IEnumerable<AdminRolePermissionListItemDto>>> GetAdminRolePermissions()
         {
             var result = await _adminRolePermissionsService.GetAllAdminRolePermissionsDtoAsync();
@@ -41,6 +43,7 @@ namespace WebApplication2.Controllers
 
         // GET: api/AdminRolePermissions/5
         [HttpGet("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult<AdminRolePermissionListItemDto>> GetAdminRolePermission(int id)
         {
             var result = await _adminRolePermissionsService.GetAdminRolePermissionByIdDtoAsync(id);
@@ -58,6 +61,7 @@ namespace WebApplication2.Controllers
 
         // POST: api/AdminRolePermissions
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult<AdminRolePermissionListItemDto>> CreateAdminRolePermission(CreateAdminRolePermissionDto createDto)
         {
             var result = await _adminRolePermissionsService.CreateAdminRolePermissionAsync(createDto);
@@ -78,6 +82,7 @@ namespace WebApplication2.Controllers
 
         // DELETE: api/AdminRolePermissions/5
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteAdminRolePermission(int id)
         {
             var result = await _adminRolePermissionsService.DeleteAdminRolePermissionAsync(id);

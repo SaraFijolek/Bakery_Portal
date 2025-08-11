@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,6 +24,7 @@ namespace WebApplication2.Controllers
 
         // GET: api/AdminPermissions
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult<IEnumerable<AdminPermissionListItemDto>>> GetAdminPermissions()
         {
             var result = await _adminPermissionsService.GetAllAdminPermissionsDtoAsync();
@@ -40,6 +42,7 @@ namespace WebApplication2.Controllers
 
         // GET: api/AdminPermissions/5
         [HttpGet("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult<AdminPermissionListItemDto>> GetAdminPermission(int id)
         {
             var result = await _adminPermissionsService.GetAdminPermissionByIdDtoAsync(id);
@@ -57,6 +60,7 @@ namespace WebApplication2.Controllers
 
         // POST: api/AdminPermissions
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult<AdminPermissionResponseDto>> CreateAdminPermission(CreateAdminPermissionDto createDto)
         {
             var result = await _adminPermissionsService.CreateAdminPermissionAsync(createDto);
@@ -74,6 +78,7 @@ namespace WebApplication2.Controllers
 
         // PUT: api/AdminPermissions/5
         [HttpPut("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> UpdateAdminPermission(int id, UpdateAdminPermissionDto updateDto)
         {
             var result = await _adminPermissionsService.UpdateAdminPermissionAsync(id, updateDto);
@@ -91,6 +96,7 @@ namespace WebApplication2.Controllers
 
         // DELETE: api/AdminPermissions/5
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteAdminPermission(int id)
         {
             var result = await _adminPermissionsService.DeleteAdminPermissionAsync(id);

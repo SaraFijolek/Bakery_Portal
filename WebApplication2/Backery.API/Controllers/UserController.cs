@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WebApplication2.DTO;
 using WebApplication2.Properties.Services.Interfaces;
@@ -19,6 +20,7 @@ namespace WebApplication2.Controllers
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public async Task<ActionResult> GetUsers([FromQuery] UserQueryDto query)
         {
             
@@ -40,6 +42,7 @@ namespace WebApplication2.Controllers
         }
 
         [HttpGet("{id}")]
+        [AllowAnonymous]
         public async Task<ActionResult> GetUser(int id)
         {
             if (id <= 0)
@@ -64,6 +67,7 @@ namespace WebApplication2.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles ="Admin")]
         public async Task<ActionResult> CreateUser([FromBody] UserCreateDto userCreateDto)
         {
             if (!ModelState.IsValid)
@@ -92,6 +96,7 @@ namespace WebApplication2.Controllers
         }
 
         [HttpPut("{id}")]
+        [Authorize(Roles ="Admin,User")]
         public async Task<ActionResult> UpdateUser(int id, [FromBody] UserUpdateDto userUpdateDto)
         {
             if (id <= 0)
@@ -133,6 +138,7 @@ namespace WebApplication2.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize(Roles ="Admin")]
         public async Task<ActionResult> DeleteUser(int id)
         {
             if (id <= 0)
@@ -166,6 +172,7 @@ namespace WebApplication2.Controllers
         }
 
         [HttpPatch("{id}/status")]
+        [Authorize(Roles =  "Admin,User")]
         public async Task<ActionResult> UpdateUserStatus(int id, [FromBody] bool isActive)
         {
             if (id <= 0)

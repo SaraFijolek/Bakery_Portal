@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,6 +24,7 @@ namespace WebApplication2.Controllers
 
         // GET: api/UserSocialAuth
         [HttpGet]
+        [Authorize(Roles = "Admin,User")]
         public async Task<ActionResult<IEnumerable<UserSocialAuth>>> GetUserSocialAuths()
         {
             var result = await _userSocialAuthService.GetUserSocialAuthsAsync();
@@ -40,6 +42,7 @@ namespace WebApplication2.Controllers
 
         // GET: api/UserSocialAuth/5
         [HttpGet("{id}")]
+        [Authorize(Roles = "Admin,User")]
         public async Task<ActionResult<UserSocialAuth>> GetUserSocialAuth(int id)
         {
             var result = await _userSocialAuthService.GetUserSocialAuthByIdAsync(id);
@@ -57,6 +60,7 @@ namespace WebApplication2.Controllers
 
         // POST: api/UserSocialAuth
         [HttpPost]
+        [Authorize(Roles = "Admin,User")]
         public async Task<ActionResult<UserSocialAuth>> CreateUserSocialAuth(CreateUserSocialAuthDto createDto)
         {
             if (!ModelState.IsValid)
@@ -77,6 +81,7 @@ namespace WebApplication2.Controllers
 
         // PUT: api/UserSocialAuth/5
         [HttpPut("{id}")]
+        [Authorize(Roles = "Admin,User")]
         public async Task<IActionResult> UpdateUserSocialAuth(int id, UpdateUserSocialAuthDto updateDto)
         {
             if (!ModelState.IsValid)
@@ -97,6 +102,7 @@ namespace WebApplication2.Controllers
 
         // DELETE: api/UserSocialAuth/5
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteUserSocialAuth(int id)
         {
             var result = await _userSocialAuthService.DeleteUserSocialAuthAsync(id);

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,6 +24,7 @@ namespace WebApplication2.Controllers
 
         // GET: api/Subcategories
         [HttpGet]
+        [AllowAnonymous]
         public async Task<ActionResult<IEnumerable<SubcategoryReadDto>>> GetSubcategories()
         {
             var result = await _subcategoriesService.GetAllSubcategoriesAsync();
@@ -39,6 +41,7 @@ namespace WebApplication2.Controllers
 
         // GET: api/Subcategories/5
         [HttpGet("{id}")]
+        [AllowAnonymous]
         public async Task<ActionResult<SubcategoryReadDto>> GetSubcategory(int id)
         {
             var result = await _subcategoriesService.GetSubcategoryAsync(id);
@@ -55,6 +58,7 @@ namespace WebApplication2.Controllers
 
         // POST: api/Subcategories
         [HttpPost]
+        [Authorize]
         public async Task<ActionResult<SubcategoryReadDto>> CreateSubcategory(SubcategoryCreateDto subcategoryCreateDto)
         {
             if (!ModelState.IsValid)
@@ -82,6 +86,7 @@ namespace WebApplication2.Controllers
 
         // PUT: api/Subcategories/5
         [HttpPut("{id}")]
+        [Authorize(Roles ="Admin,User")]
         public async Task<IActionResult> UpdateSubcategory(int id, SubcategoryUpdateDto subcategoryUpdateDto)
         {
             if (!ModelState.IsValid)
@@ -112,6 +117,8 @@ namespace WebApplication2.Controllers
 
         // DELETE: api/Subcategories/5
         [HttpDelete("{id}")]
+        [Authorize(Roles ="Admin")]
+
         public async Task<IActionResult> DeleteSubcategory(int id)
         {
             var result = await _subcategoriesService.DeleteSubcategoryAsync(id);

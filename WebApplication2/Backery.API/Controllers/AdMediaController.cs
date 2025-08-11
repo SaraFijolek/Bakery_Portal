@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,6 +25,7 @@ namespace WebApplication2.Controllers
 
         // GET: api/AdMedia
         [HttpGet]
+        [AllowAnonymous]
         public async Task<ActionResult<IEnumerable<AdMediaResponseDto>>> GetAdMedia()
         {
             var result = await _adMadiaService.GetAllAdMediaAsync();
@@ -41,6 +43,7 @@ namespace WebApplication2.Controllers
 
         // GET: api/AdMedia/5
         [HttpGet("{id}")]
+        [AllowAnonymous]
         public async Task<ActionResult<AdMediaResponseDto>> GetAdMedia(int id)
         {
             var result = await _adMadiaService.GetAdMediaByIdAsync(id);
@@ -58,6 +61,7 @@ namespace WebApplication2.Controllers
 
         // POST: api/AdMedia
         [HttpPost]
+        [Authorize]
         public async Task<ActionResult<AdMediaResponseDto>> CreateAdMedia(CreateAdMediaDto createAdMediaDto)
         {
             if (!ModelState.IsValid)
@@ -85,6 +89,7 @@ namespace WebApplication2.Controllers
 
         // PUT: api/AdMedia/5
         [HttpPut("{id}")]
+        [Authorize(Roles = "Admin,User")]
         public async Task<IActionResult> UpdateAdMedia(int id, UpdateAdMediaDto updateAdMediaDto)
         {
             if (!ModelState.IsValid)
@@ -122,6 +127,8 @@ namespace WebApplication2.Controllers
 
         // DELETE: api/AdMedia/5
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Admin")]
+
         public async Task<IActionResult> DeleteAdMedia(int id)
         {
             var result = await _adMadiaService.DeleteAdMediaAsync(id);

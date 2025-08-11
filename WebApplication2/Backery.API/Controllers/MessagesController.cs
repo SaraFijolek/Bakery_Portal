@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,6 +26,7 @@ namespace WebApplication2.Controllers
 
         // GET: api/Messages
         [HttpGet]
+        [AllowAnonymous]
         public async Task<ActionResult<IEnumerable<MessageReadDto>>> GetMessages()
         {
             var result = await _messagesService.GetAllMessagesAsync();
@@ -42,6 +44,7 @@ namespace WebApplication2.Controllers
 
         // GET: api/Messages/5
         [HttpGet("{id}")]
+        [AllowAnonymous]
         public async Task<ActionResult<MessageReadDto>> GetMessage(int id)
         {
             var result = await _messagesService.GetMessageAsync(id);
@@ -59,6 +62,7 @@ namespace WebApplication2.Controllers
 
         // POST: api/Messages
         [HttpPost]
+        [Authorize]
         public async Task<ActionResult<MessageReadDto>> CreateMessage(MessageCreateDto messageCreateDto)
         {
             if (!ModelState.IsValid)
@@ -85,6 +89,7 @@ namespace WebApplication2.Controllers
 
         // PUT: api/Messages/5
         [HttpPut("{id}")]
+        [Authorize(Roles = "Admin,User")]
         public async Task<IActionResult> UpdateMessage(int id, MessageUpdateDto messageUpdateDto)
         {
             if (!ModelState.IsValid)
@@ -113,6 +118,7 @@ namespace WebApplication2.Controllers
 
         // DELETE: api/Messages/5
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteMessage(int id)
         {
             var result = await _messagesService.DeleteMessageAsync(id);

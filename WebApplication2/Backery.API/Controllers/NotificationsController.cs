@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,6 +25,7 @@ namespace WebApplication2.Controllers
 
         // GET: api/Notifications
         [HttpGet]
+        [Authorize(Roles = "Admin,User")]
         public async Task<ActionResult<IEnumerable<NotificationDto>>> GetNotifications()
         {
             var result = await _notificationService.GetNotificationsAsync();
@@ -40,6 +42,7 @@ namespace WebApplication2.Controllers
 
         // GET: api/Notifications/5
         [HttpGet("{id}")]
+        [Authorize(Roles = "Admin,User")]
         public async Task<ActionResult<NotificationDto>> GetNotification(int id)
         {
             var result = await _notificationService.GetNotificationByIdAsync(id);
@@ -56,6 +59,7 @@ namespace WebApplication2.Controllers
 
         // POST: api/Notifications
         [HttpPost]
+        [Authorize(Roles = "Admin,User")]
         public async Task<ActionResult<NotificationDto>> CreateNotification(CreateNotificationDto createNotificationDto)
         {
             if (!ModelState.IsValid)
@@ -82,6 +86,7 @@ namespace WebApplication2.Controllers
 
         // PUT: api/Notifications/5
         [HttpPut("{id}")]
+        [Authorize(Roles = "Admin, User")]
         public async Task<IActionResult> UpdateNotification(int id, UpdateNotificationDto updateNotificationDto)
         {
             if (!ModelState.IsValid)
@@ -108,6 +113,7 @@ namespace WebApplication2.Controllers
 
         // DELETE: api/Notifications/5
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteNotification(int id)
         {
             var result = await _notificationService.DeleteNotificationAsync(id);

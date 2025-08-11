@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,6 +26,7 @@ namespace WebApplication2.Controllers
 
         // GET: api/ReportedContents
         [HttpGet]
+        [Authorize(Roles = "Admin,User")]
         public async Task<ActionResult<IEnumerable<ReportedContentDto>>> GetReportedContents()
         {
             var result = await _reportedContentsService.GetReportedContentsAsync();
@@ -41,6 +43,7 @@ namespace WebApplication2.Controllers
 
         // GET: api/ReportedContents/5
         [HttpGet("{id}")]
+        [Authorize(Roles = "Admin,User")]
         public async Task<ActionResult<ReportedContentDto>> GetReportedContent(int id)
         {
             var result = await _reportedContentsService.GetReportedContentAsync(id);
@@ -57,6 +60,7 @@ namespace WebApplication2.Controllers
 
         // POST: api/ReportedContents
         [HttpPost]
+        [Authorize(Roles = "User")]
         public async Task<ActionResult<ReportedContentDto>> CreateReportedContent(CreateReportedContentDto createDto)
         {
             if (!ModelState.IsValid)
@@ -84,6 +88,7 @@ namespace WebApplication2.Controllers
 
         // PUT: api/ReportedContents/5
         [HttpPut("{id}")]
+        [Authorize(Roles = "User")]
         public async Task<ActionResult<ReportedContentDto>> UpdateReportedContent(int id, UpdateReportedContentDto updateDto)
         {
             if (!ModelState.IsValid)
@@ -114,6 +119,7 @@ namespace WebApplication2.Controllers
 
         // DELETE: api/ReportedContents/5
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteReportedContent(int id)
         {
             var result = await _reportedContentsService.DeleteReportedContentAsync(id);

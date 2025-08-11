@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,6 +24,7 @@ namespace WebApplication2.Controllers
 
         // GET: api/Ratings
         [HttpGet]
+        [AllowAnonymous]
         public async Task<ActionResult> GetRatings()
         {
             var result = await _ratingsService.GetRatingsAsync();
@@ -40,6 +42,7 @@ namespace WebApplication2.Controllers
 
         // GET: api/Ratings/5
         [HttpGet("{id}")]
+        [AllowAnonymous]
         public async Task<ActionResult> GetRating(int id)
         {
             var result = await _ratingsService.GetRatingByIdAsync(id);
@@ -57,6 +60,7 @@ namespace WebApplication2.Controllers
 
         // POST: api/Ratings
         [HttpPost]
+        [Authorize(Roles ="Admin")]
         public async Task<ActionResult> CreateRating(CreateRatingDto createRatingDto)
         {
             if (!ModelState.IsValid)
@@ -82,6 +86,7 @@ namespace WebApplication2.Controllers
 
         // PUT: api/Ratings/5
         [HttpPut("{id}")]
+        [Authorize(Roles =  "Admin")]
         public async Task<ActionResult> UpdateRating(int id, UpdateRatingDto updateRatingDto)
         {
             if (!ModelState.IsValid)
@@ -107,6 +112,7 @@ namespace WebApplication2.Controllers
 
         // DELETE: api/Ratings/5
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult> DeleteRating(int id)
         {
             var result = await _ratingsService.DeleteRatingAsync(id);

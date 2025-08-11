@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using WebApplication2.DTO;
@@ -18,6 +19,7 @@ namespace WebApplication2.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin,User")]
         public async Task<ActionResult> GetAds()
         {
             var result = await _adsService.GetAllAdsAsync();
@@ -34,6 +36,7 @@ namespace WebApplication2.Controllers
         }
 
         [HttpGet("{id}")]
+        [Authorize(Roles = "Admin,User")]
         public async Task<ActionResult> GetAd(int id)
         {
             var result = await _adsService.GetAdByIdAsync(id);
@@ -50,6 +53,7 @@ namespace WebApplication2.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin,User")]
         public async Task<ActionResult> CreateAd([FromBody] AdCreateDto dto)
         {
             var result = await _adsService.CreateAdAsync(dto);
@@ -66,6 +70,7 @@ namespace WebApplication2.Controllers
         }
 
         [HttpPut("{id}")]
+        [Authorize(Roles = "Admin,User")]
         public async Task<ActionResult> UpdateAd(int id, [FromBody] AdUpdateDto dto)
         {
             if (id != dto.AdId)
@@ -92,6 +97,7 @@ namespace WebApplication2.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult> DeleteAd(int id)
         {
             var result = await _adsService.DeleteAdAsync(id);

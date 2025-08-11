@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,6 +24,7 @@ namespace WebApplication2.Controllers
 
         // GET: api/AdminAuditLogs
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult<IEnumerable<AdminAuditLogDto>>> GetAdminAuditLogs()
         {
             var result = await _adminAuditLogsService.GetAdminAuditLogsDtoAsync();
@@ -40,6 +42,7 @@ namespace WebApplication2.Controllers
 
         // GET: api/AdminAuditLogs/5
         [HttpGet("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult<AdminAuditLogDto>> GetAdminAuditLog(int id)
         {
             var result = await _adminAuditLogsService.GetAdminAuditLogByIdDtoAsync(id);
@@ -57,6 +60,7 @@ namespace WebApplication2.Controllers
 
         // POST: api/AdminAuditLogs
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult<AdminAuditLogDto>> CreateAdminAuditLog(CreateAdminAuditLogDto createDto)
         {
             var result = await _adminAuditLogsService.CreateAdminAuditLogAsync(createDto);
@@ -74,6 +78,7 @@ namespace WebApplication2.Controllers
 
         // PUT: api/AdminAuditLogs/5
         [HttpPut("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> UpdateAdminAuditLog(int id, UpdateAdminAuditLogDto updateDto)
         {
             var result = await _adminAuditLogsService.UpdateAdminAuditLogAsync(id, updateDto);
@@ -91,6 +96,7 @@ namespace WebApplication2.Controllers
 
         // DELETE: api/AdminAuditLogs/5
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteAdminAuditLog(int id)
         {
             var result = await _adminAuditLogsService.DeleteAdminAuditLogAsync(id);

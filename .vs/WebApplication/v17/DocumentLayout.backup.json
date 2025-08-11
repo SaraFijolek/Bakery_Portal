@@ -3,16 +3,8 @@
   "WorkspaceRootPath": "C:\\Users\\saras\\OneDrive\\Dokumenty\\programowanie-projekty\\C#\\WebApplication2\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{83D25DBD-1DEC-441A-B080-7DD17F9137D1}|WebApplication2\\WebApplication2.csproj|c:\\users\\saras\\onedrive\\dokumenty\\programowanie-projekty\\c#\\webapplication2\\webapplication2\\backery.api\\controllers\\admediacontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{83D25DBD-1DEC-441A-B080-7DD17F9137D1}|WebApplication2\\WebApplication2.csproj|solutionrelative:webapplication2\\backery.api\\controllers\\admediacontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{83D25DBD-1DEC-441A-B080-7DD17F9137D1}|WebApplication2\\WebApplication2.csproj|c:\\users\\saras\\onedrive\\dokumenty\\programowanie-projekty\\c#\\webapplication2\\webapplication2\\backery.services\\services\\interfaces\\iadmadiaservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{83D25DBD-1DEC-441A-B080-7DD17F9137D1}|WebApplication2\\WebApplication2.csproj|solutionrelative:webapplication2\\backery.services\\services\\interfaces\\iadmadiaservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{83D25DBD-1DEC-441A-B080-7DD17F9137D1}|WebApplication2\\WebApplication2.csproj|c:\\users\\saras\\onedrive\\dokumenty\\programowanie-projekty\\c#\\webapplication2\\webapplication2\\backery.services\\services\\admadiaservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{83D25DBD-1DEC-441A-B080-7DD17F9137D1}|WebApplication2\\WebApplication2.csproj|solutionrelative:webapplication2\\backery.services\\services\\admadiaservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{83D25DBD-1DEC-441A-B080-7DD17F9137D1}|WebApplication2\\WebApplication2.csproj|c:\\users\\saras\\onedrive\\dokumenty\\programowanie-projekty\\c#\\webapplication2\\webapplication2\\backery.api\\controllers\\adscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{83D25DBD-1DEC-441A-B080-7DD17F9137D1}|WebApplication2\\WebApplication2.csproj|solutionrelative:webapplication2\\backery.api\\controllers\\adscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -22,45 +14,19 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 2,
+          "SelectedChildIndex": 0,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "AdMadiaService.cs",
-              "DocumentMoniker": "C:\\Users\\saras\\OneDrive\\Dokumenty\\programowanie-projekty\\C#\\WebApplication2\\WebApplication2\\Backery.Services\\Services\\AdMadiaService.cs",
-              "RelativeDocumentMoniker": "WebApplication2\\Backery.Services\\Services\\AdMadiaService.cs",
-              "ToolTip": "C:\\Users\\saras\\OneDrive\\Dokumenty\\programowanie-projekty\\C#\\WebApplication2\\WebApplication2\\Backery.Services\\Services\\AdMadiaService.cs",
-              "RelativeToolTip": "WebApplication2\\Backery.Services\\Services\\AdMadiaService.cs",
-              "ViewState": "AgIAALgAAAAAAAAAAAAcwLcAAABFAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-10T19:57:56.666Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "IAdMadiaService.cs",
-              "DocumentMoniker": "C:\\Users\\saras\\OneDrive\\Dokumenty\\programowanie-projekty\\C#\\WebApplication2\\WebApplication2\\Backery.Services\\Services\\Interfaces\\IAdMadiaService.cs",
-              "RelativeDocumentMoniker": "WebApplication2\\Backery.Services\\Services\\Interfaces\\IAdMadiaService.cs",
-              "ToolTip": "C:\\Users\\saras\\OneDrive\\Dokumenty\\programowanie-projekty\\C#\\WebApplication2\\WebApplication2\\Backery.Services\\Services\\Interfaces\\IAdMadiaService.cs",
-              "RelativeToolTip": "WebApplication2\\Backery.Services\\Services\\Interfaces\\IAdMadiaService.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAA9AAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-10T19:58:11.862Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "AdMediaController.cs",
-              "DocumentMoniker": "C:\\Users\\saras\\OneDrive\\Dokumenty\\programowanie-projekty\\C#\\WebApplication2\\WebApplication2\\Backery.API\\Controllers\\AdMediaController.cs",
-              "RelativeDocumentMoniker": "WebApplication2\\Backery.API\\Controllers\\AdMediaController.cs",
-              "ToolTip": "C:\\Users\\saras\\OneDrive\\Dokumenty\\programowanie-projekty\\C#\\WebApplication2\\WebApplication2\\Backery.API\\Controllers\\AdMediaController.cs",
-              "RelativeToolTip": "WebApplication2\\Backery.API\\Controllers\\AdMediaController.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAIsAAAABAAAAAAAAAA==",
+              "Title": "AdsController.cs",
+              "DocumentMoniker": "C:\\Users\\saras\\OneDrive\\Dokumenty\\programowanie-projekty\\C#\\WebApplication2\\WebApplication2\\Backery.API\\Controllers\\AdsController.cs",
+              "RelativeDocumentMoniker": "WebApplication2\\Backery.API\\Controllers\\AdsController.cs",
+              "ToolTip": "C:\\Users\\saras\\OneDrive\\Dokumenty\\programowanie-projekty\\C#\\WebApplication2\\WebApplication2\\Backery.API\\Controllers\\AdsController.cs",
+              "RelativeToolTip": "WebApplication2\\Backery.API\\Controllers\\AdsController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAGMAAAAhAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-10T19:56:50.972Z",
+              "WhenOpened": "2025-08-11T08:34:17.673Z",
               "EditorCaption": ""
             }
           ]

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,6 +24,7 @@ namespace WebApplication2.Controllers
 
         // GET: api/UserModerations
         [HttpGet]
+        [Authorize(Roles = "Admin,User")]
         public async Task<IActionResult> GetUserModerations()
         {
             var result = await _userModerationsService.GetUserModerationsAsync();
@@ -40,6 +42,7 @@ namespace WebApplication2.Controllers
 
         // GET: api/UserModerations/list
         [HttpGet("list")]
+        [Authorize(Roles = "Admin,User")]
         public async Task<IActionResult> GetUserModerationsList()
         {
             var result = await _userModerationsService.GetUserModerationsListAsync();
@@ -57,6 +60,7 @@ namespace WebApplication2.Controllers
 
         // GET: api/UserModerations/active
         [HttpGet("active")]
+        [Authorize(Roles = "Admin,User")]
         public async Task<IActionResult> GetActiveUserModerations()
         {
             var result = await _userModerationsService.GetActiveUserModerationsAsync();
@@ -74,6 +78,7 @@ namespace WebApplication2.Controllers
 
         // GET: api/UserModerations/user/5
         [HttpGet("user/{userId}")]
+        [Authorize(Roles = "Admin,User")]
         public async Task<IActionResult> GetUserModerationsByUserId(int userId)
         {
             var result = await _userModerationsService.GetUserModerationsByUserIdAsync(userId);
@@ -91,6 +96,7 @@ namespace WebApplication2.Controllers
 
         // GET: api/UserModerations/5
         [HttpGet("{id}")]
+        [Authorize(Roles = "Admin,User")]
         public async Task<IActionResult> GetUserModeration(int id)
         {
             var result = await _userModerationsService.GetUserModerationByIdAsync(id);
@@ -108,6 +114,7 @@ namespace WebApplication2.Controllers
 
         // POST: api/UserModerations
         [HttpPost]
+        [Authorize(Roles = "Admin,User")]
         public async Task<IActionResult> CreateUserModeration(CreateUserModerationDto createDto)
         {
             if (!ModelState.IsValid)
@@ -133,6 +140,7 @@ namespace WebApplication2.Controllers
 
         // PUT: api/UserModerations/5
         [HttpPut("{id}")]
+        [Authorize(Roles = "Admin,User")]
         public async Task<IActionResult> UpdateUserModeration(int id, UpdateUserModerationDto updateDto)
         {
             if (!ModelState.IsValid)
@@ -158,6 +166,7 @@ namespace WebApplication2.Controllers
 
         // DELETE: api/UserModerations/5
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteUserModeration(int id)
         {
             var result = await _userModerationsService.DeleteUserModerationAsync(id);
