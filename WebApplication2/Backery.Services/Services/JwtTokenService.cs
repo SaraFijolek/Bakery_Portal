@@ -15,7 +15,7 @@ public class JwtTokenService : IJwtTokenService
         _key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JWT:Key"]));
     }
 
-    public string CreateToken(string userId)
+    public string CreateToken(string userId, IList<string> roles)
     {
         var credentials = new SigningCredentials(_key, SecurityAlgorithms.HmacSha512Signature);
 
@@ -24,6 +24,13 @@ public class JwtTokenService : IJwtTokenService
             new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
             new Claim(JwtRegisteredClaimNames.Sub, userId.ToString())
         };
+
+        foreach (var role in roles)
+        {
+            Console.WriteLine($"[TOKEN] Adding role: {role}");
+            claims.Add(new Claim(ClaimTypes.Role, role));
+        }
+
 
         var expirationDate = DateTime.Now.AddHours(1);
 

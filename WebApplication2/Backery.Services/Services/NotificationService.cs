@@ -325,5 +325,10 @@ namespace WebApplication2.Properties.Services
         {
             return await _context.Notifications.AnyAsync(e => e.NotificationId == id);
         }
+
+        public Task<NotificationsService<IEnumerable<NotificationDto>>> GetForUserAsync(string userId)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Net.Mail;
+using WebApplication2.Backery.API.DTO;
 using WebApplication2.Backery.Services.Services.Interfaces;
 using WebApplication2.Properties.DTOs;
 using WebApplication2.Properties.Models;
@@ -54,10 +55,11 @@ public class AccountController : ControllerBase
 
             return Ok(new { requires2FA = true });
         }
-
-        var token = _tokenService.CreateToken(user.Id);
+        var roles = await _userManager.GetRolesAsync(user);
+        var token = _tokenService.CreateToken(user.Id, roles);
         return Ok(new { access_token = token });
-    }
+    } 
+
 
     [AllowAnonymous]
     [HttpPost("login2fa")]
@@ -70,13 +72,19 @@ public class AccountController : ControllerBase
             return BadRequest();
         }
 
+        var roles = await _userManager.GetRolesAsync(user);
+        if (!roles.Contains("Admin"))
+        {
+            return Forbid(); 
+        }
+
         var valid = await _userManager.VerifyTwoFactorTokenAsync(user, TokenOptions.DefaultEmailProvider, model.Code2FA);
         if (!valid)
         {
             return BadRequest();
         }
 
-        var token = _tokenService.CreateToken(user.Id);
+        var token = _tokenService.CreateToken(user.Id, roles);
         return Ok(new { access_token = token });
     }
 
@@ -132,4 +140,46 @@ public class AccountController : ControllerBase
 
         return Ok();
     }
+
+    [HttpPost("forgot-password")]
+    public async Task<IActionResult> ForgotPassword([FromBody] ForgotPasswordDto model)
+    {
+        if (string.IsNullOrEmpty(model.Email))
+            return BadRequest();
+
+        var user = await _userManager.FindByEmailAsync(model.Email);
+        if (user == null)
+
+            return Ok();
+
+        var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+
+
+        return Ok(new
+        {
+            
+            token,
+            userId = user.Id
+        });
+    }
+
+    [HttpPost("reset-password")]
+    public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordDto model)
+    {
+        if (string.IsNullOrEmpty(model.Email) || string.IsNullOrEmpty(model.Token) || string.IsNullOrEmpty(model.NewPassword))
+            return BadRequest();
+
+        var user = await _userManager.FindByEmailAsync(model.Email);
+        if (user == null)
+            return BadRequest();
+
+        var result = await _userManager.ResetPasswordAsync(user, model.Token, model.NewPassword);
+
+        if (!result.Succeeded)
+            return BadRequest(result.Errors);
+
+        return Ok();
+    }
+
+
 }
