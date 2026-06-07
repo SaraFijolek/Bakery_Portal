@@ -12,8 +12,8 @@ using WebApplication2.Properties.Data;
 namespace WebApplication1.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260428173331_Init")]
-    partial class Init
+    [Migration("20260607173943_XD")]
+    partial class XD
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

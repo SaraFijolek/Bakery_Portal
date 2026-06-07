@@ -169,13 +169,7 @@ namespace WebApplication2.Properties.Services
         {
             try
             {
-                if (id != subcategoryUpdateDto.SubcategoryId)
-                {
-                    return SubcategoryService<SubcategoryReadDto>.BadResult(
-                        "Subcategory ID mismatch",
-                        400,
-                        new List<string> { "The provided ID does not match the subcategory ID in the request body" });
-                }
+               
 
                 var existingSubcategory = await _context.Subcategories.FindAsync(id);
                 if (existingSubcategory == null)

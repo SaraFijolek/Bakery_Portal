@@ -99,7 +99,7 @@ namespace WebApplication2.Controllers
         }
 
         [HttpDelete("{id}")]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin,User")]
         public async Task<ActionResult> DeleteAd(int id)
         {
             var result = await _adsService.DeleteAdAsync(id);

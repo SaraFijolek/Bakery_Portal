@@ -26,8 +26,8 @@ namespace WebApplication2.DTO
     
     public class SubcategoryUpdateDto
     {
-        [Required]
-        public int SubcategoryId { get; set; }
+       
+        
 
         [Required]
         public int CategoryId { get; set; }

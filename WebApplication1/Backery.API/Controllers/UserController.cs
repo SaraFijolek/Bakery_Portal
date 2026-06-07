@@ -138,7 +138,7 @@ namespace WebApplication2.Controllers
         }
 
         [HttpDelete("{id}")]
-        [Authorize(Roles ="Admin")]
+        [Authorize(Roles ="Admin,User")]
         public async Task<ActionResult> DeleteUser(string id)
         {
             if (string.IsNullOrEmpty(id))
