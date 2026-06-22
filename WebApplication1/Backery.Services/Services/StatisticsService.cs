@@ -1,9 +1,10 @@
 ﻿using WebApplication2.Backery.API.DTO;
+using WebApplication2.Backery.Services.Services.Interfaces;
 using WebApplication2.Properties.Data;
 
 namespace WebApplication2.Backery.Services.Services
 {
-    public class StatisticsService
+    public class StatisticsService : IStatisticsService
     {
         private readonly AppDbContext _context;
 

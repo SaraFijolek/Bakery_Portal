@@ -84,7 +84,7 @@ builder.Services.AddIdentityCore<User>(options => { })
     .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<AppDbContext>()
     .AddDefaultTokenProviders()
-    .AddSignInManager<SignInManager<User>>(); 
+    .AddSignInManager<SignInManager<User>>();
 
 
 builder.Services
@@ -117,7 +117,7 @@ builder.Services.Configure<FormOptions>(options =>
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.Service(); 
+builder.Services.Service();
 
 
 var app = builder.Build();
@@ -175,7 +175,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseCors("AllowAll");
-app.UseStaticFiles();     
+app.UseStaticFiles();
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();

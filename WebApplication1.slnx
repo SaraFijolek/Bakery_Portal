@@ -1,4 +1,5 @@
 <Solution>
   <Folder Name="/Elementy rozwiązania/" />
+  <Project Path="BakeryTests/BakeryTests.csproj" Id="dab0b88e-8cd8-46a7-b678-a50cd07357b1" />
   <Project Path="WebApplication1/WebApplication1.csproj" />
 </Solution>

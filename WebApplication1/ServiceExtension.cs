@@ -3,7 +3,6 @@ using WebApplication2.Properties.Services;
 using WebApplication2.Properties.Services.Interfaces;
 using WebApplication2.Backery.Services.Services.Interfaces;
 using IEmailSender = Microsoft.AspNetCore.Identity.UI.Services.IEmailSender;
-
 namespace WebApplication2
 {
     public static class ServiceExtension
@@ -29,6 +28,7 @@ namespace WebApplication2
             services.AddScoped<IAdminsSessionsService, AdminsSessionsService>();
             services.AddScoped<IJwtTokenService, JwtTokenService>();
             services.AddScoped<IEmailSender, EmailSender>();
+            services.AddScoped<IStatisticsService, StatisticsService>();
         }
     }
 }

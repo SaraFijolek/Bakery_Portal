@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using WebApplication2.Backery.Services.Services.Interfaces;
 using WebApplication2.Backery.Services.Services;
 
 namespace WebApplication2.Backery.API.Controllers
@@ -7,9 +8,9 @@ namespace WebApplication2.Backery.API.Controllers
     [Route("api/statistics")]
     public class StatisticsController : ControllerBase
     {
-        private readonly StatisticsService _service;
+        private readonly IStatisticsService _service;
 
-        public StatisticsController(StatisticsService service)
+        public StatisticsController(IStatisticsService service)
         {
             _service = service;
         }

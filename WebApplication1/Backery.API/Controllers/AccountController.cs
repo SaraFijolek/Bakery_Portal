@@ -75,7 +75,7 @@ public class AccountController : ControllerBase
         var roles = await _userManager.GetRolesAsync(user);
         if (!roles.Contains("Admin"))
         {
-            return Forbid(); 
+            return Forbid();
         }
 
         var valid = await _userManager.VerifyTwoFactorTokenAsync(user, TokenOptions.DefaultEmailProvider, model.Code2FA);
@@ -85,7 +85,7 @@ public class AccountController : ControllerBase
         }
 
         var token = _tokenService.CreateToken(user.Id, roles);
-        return Ok(new { access_token = token});
+        return Ok(new { access_token = token });
     }
 
     [AllowAnonymous]
@@ -158,7 +158,7 @@ public class AccountController : ControllerBase
 
         return Ok(new
         {
-            
+
             token,
             userId = user.Id
         });
